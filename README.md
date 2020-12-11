@@ -1,0 +1,2 @@
+# barcode-searcher-service
+
