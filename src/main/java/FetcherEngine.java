@@ -7,9 +7,9 @@ import java.io.IOException;
 
 public class FetcherEngine {
 
+
     private String targetURL;
     private EngineCredentials credentials;
-
 
     public FetcherEngine(EngineCredentials credentials) {
         this.credentials = credentials;
@@ -20,7 +20,7 @@ public class FetcherEngine {
     public ProductData findProductData(String barcode) throws IOException, JSONException {
         String jsonSearchResult = fetchSearchResultAsJson(barcode);
 
-        //        System.out.println(jsonSearchResult); //печать боди
+        //                System.out.println(jsonSearchResult); //печать боди
 
         return parseProductDataFromJson(jsonSearchResult);
     }
@@ -29,7 +29,7 @@ public class FetcherEngine {
         return Jsoup.connect(targetURL + query).ignoreContentType(true).execute().body();
     }
 
-    static ProductData parseProductDataFromJson(String json) throws JSONException {
+    private ProductData parseProductDataFromJson(String json) throws JSONException {
 
         String productName;
         String photoURL;
@@ -44,6 +44,10 @@ public class FetcherEngine {
         userRate = jsonArrayItems.getJSONObject(0).getJSONObject("pagemap").getJSONArray("metatags").getJSONObject(0).getString("og:description").replaceAll("\\n", "");
         productName = jsonArrayItems.getJSONObject(0).getString("title").replaceAll("\\.", "");
 
+        if (!isCorrectUserRate(userRate)) {
+            userRate = " ";
+        }
+
         return new ProductData(productName, photoURL, userRate, description);
 
     }
@@ -56,6 +60,10 @@ public class FetcherEngine {
     public void setCredentials(EngineCredentials credentials) {
         this.credentials = credentials;
         initTargetURL();
+    }
+
+    private boolean isCorrectUserRate(String userRate) {
+        return userRate.contains("★");
     }
 
 }

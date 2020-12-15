@@ -11,26 +11,24 @@ public class EngineCredentials {
     private static int credentialsUsed = 0;
 
     public EngineCredentials() {
-        System.out.println("SearchEngineParameters init");
-
         initParametersMap();
         initFields();
-
         checkAvailableCredentials();
-
-        //        System.out.println(searchersCounter);
     }
+
 
     private void putParameters() {
 
         parametersPool.put(
                 "b16555d6478b893e4", "AIzaSyAu25Ye0uxJEjJcLvIZj8YZJF1a82vdInQ"
         );
-        //        parametersPool.put(
-        //                "6ff535218ad7fe3ba", "AIzaSyC8KNeuOz61wQlj6202MYO3piEbSDdw9rc"
-        //        );
+        parametersPool.put(
+                "6ff535218ad7fe3ba", "AIzaSyC8KNeuOz61wQlj6202MYO3piEbSDdw9rc"
+        );
+
 
     }
+
 
     private void initParametersMap() {
         parametersPool = new LinkedHashMap<>();
@@ -65,6 +63,10 @@ public class EngineCredentials {
         checkAvailableCredentials();
     }
 
+    public static void checkAvailableCredentials() {
+        FetcherLogic.thereAreAvailableCredentials = credentialsUsed < poolSize();
+    }
+
 
     public String getApiKey() {
         return apiKey;
@@ -78,8 +80,5 @@ public class EngineCredentials {
         return parametersPool.size();
     }
 
-    public static void checkAvailableCredentials() {
-        FetcherLogic.thereAreAvailableCredentials = credentialsUsed < poolSize();
-    }
 
 }

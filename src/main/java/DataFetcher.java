@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -9,33 +10,22 @@ public class DataFetcher {
     EngineCredentials credentials;
 
     public DataFetcher() {
-
         this.credentials = new EngineCredentials();
         this.fetcherEngine = new FetcherEngine(credentials);
         this.fetcherLogic = new FetcherLogic(this);
-
-
     }
 
     public String fetch(String query) throws IOException, NoMoreAvailableCredentialsException, JSONException {
-
-        String jsonProductData = null;
+        ObjectMapper objectMapper = new ObjectMapper();
 
         ProductData productData = fetcherLogic.startSearch(query);
 
+        return objectMapper.writeValueAsString(productData);
 
-        //convert data to json
-
-        //       ObjectMapper objectMapper = new ObjectMapper();
-        //       objectMapper.writeValueAsString()
-
-
-
-        return jsonProductData;
     }
 
 
-    public FetcherEngine getSearchEngine() {
+    public FetcherEngine getFetcherEngine() {
         return fetcherEngine;
     }
 

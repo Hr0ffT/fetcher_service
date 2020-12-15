@@ -18,7 +18,7 @@ public class FetcherLogic {
 
     public FetcherLogic(DataFetcher dataFetcher) {
         this.dataFetcher = dataFetcher;
-        this.fetcherEngine = dataFetcher.getSearchEngine();
+        this.fetcherEngine = dataFetcher.getFetcherEngine();
 
     }
 
@@ -58,7 +58,6 @@ public class FetcherLogic {
     private static void resetAttempts() {
         startAttempt = 0;
     }
-
 
 
 }
