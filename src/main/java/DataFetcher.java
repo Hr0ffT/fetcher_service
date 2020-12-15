@@ -15,19 +15,20 @@ public class DataFetcher {
 
     }
 
-    public String fetch(String query) throws IOException {
+    public String fetch(String query) throws IOException, NoMoreAvailableCredentialsException {
 
         String jsonProductData = null;
 
         ProductData productData = fetcherLogic.startSearch(query);
 
 
+        //convert data to json
+
+        //       ObjectMapper objectMapper = new ObjectMapper();
+        //       objectMapper.writeValueAsString()
 
 
 
-
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.writeValueAsString()
         return jsonProductData;
     }
 

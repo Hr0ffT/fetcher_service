@@ -11,10 +11,8 @@ public class FetcherLogic {
     private final DataFetcher dataFetcher;
     private final FetcherEngine fetcherEngine;
 
-    int maxAttempts = 1;
-
-
-    //    int maxAttempts = SearchEngineParameters.getPoolSize() * 2;
+    private static int startAttempt = 0;
+    private static final int MAX_RESTART_ATTEMPTS = 1;
 
 
     public FetcherLogic(DataFetcher dataFetcher) {
@@ -23,69 +21,43 @@ public class FetcherLogic {
 
     }
 
-
-    private void restart() {
-        System.out.println("restarting");
-        EngineCredentials.resetUsedCredentials();
-    }
-
-    //    private void initLogic() {
-    //
-    //        thereIsAvailableSearchEngine = true;
-    //
-    //
-    //        //        while (true) {
-    //        //
-    //        //            System.out.println();
-    //        //            System.out.println("NEED TO INCREASE POOL!!!!");
-    //        //            //            Thread.sleep(10000);
-    //        //            initLogic();
-    //        //        }
-    //
-    //    }
-
-    //    private void search(String query) {
-    //        try {
-    //            searchEngine.findProductData(query);
-    //        } catch (IOException e) {
-    //            while (thereIsAvailableSearchEngine) {
-    //                searcher.switchEngineCredentials();
-    //                search(query);
-    //            }
-    //            System.out.println("This engine is not available");
-    //            System.out.println();
-    //
-    //        }
-    //    }
-
-    public ProductData startSearch(String query) throws IOException {
+    public ProductData startSearch(String query) throws IOException, NoMoreAvailableCredentialsException {
         try {
 
             return fetcherEngine.findProductData(query);
 
         } catch (HttpStatusException e) {
-            System.out.println("This engine is not available");
+            // When credentials have reached day limit
 
             while (thereAreAvailableCredentials) {
                 dataFetcher.switchEngineCredentials();
                 startSearch(query);
             }
 
+            for (; startAttempt < MAX_RESTART_ATTEMPTS; startAttempt++) {
+                restartSearch(query);
+            }
+
+            resetAttempts();
+
+            throw new NoMoreAvailableCredentialsException();
 
         }
 
-
     }
-    //    public void attemptSearch(String barcode) {
-    //
-    //        int attempt = 0;
-    //
-    //        while (attempt < maxAttempts) {
-    //
-    ////            search(barcode);
-    //
-    //            attempt++;
-    //            restart();
-    //        }
-    //    }
+
+
+    private void restartSearch(String query) throws IOException, NoMoreAvailableCredentialsException {
+
+        System.out.println("restarting");
+        EngineCredentials.resetUsedCredentials();
+        startSearch(query);
+    }
+
+    private static void resetAttempts() {
+        startAttempt = 0;
+    }
+
+
+
 }
