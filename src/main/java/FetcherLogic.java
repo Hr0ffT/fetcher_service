@@ -1,4 +1,5 @@
 
+import org.json.JSONException;
 import org.jsoup.HttpStatusException;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class FetcherLogic {
 
     }
 
-    public ProductData startSearch(String query) throws IOException, NoMoreAvailableCredentialsException {
+    public ProductData startSearch(String query) throws IOException, NoMoreAvailableCredentialsException, JSONException {
         try {
 
             return fetcherEngine.findProductData(query);
@@ -47,7 +48,7 @@ public class FetcherLogic {
     }
 
 
-    private void restartSearch(String query) throws IOException, NoMoreAvailableCredentialsException {
+    private void restartSearch(String query) throws IOException, NoMoreAvailableCredentialsException, JSONException {
 
         System.out.println("restarting");
         EngineCredentials.resetUsedCredentials();

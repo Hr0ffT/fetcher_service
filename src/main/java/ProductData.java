@@ -2,17 +2,15 @@ public class ProductData {
 
     String productName;
     String photoURL;
-    String country;
     String userRate;
-    String manufacturer;
+    String description;
 
 
-    public ProductData(String productName, String photoURL, String country, String userRate, String manufacturer) {
+    public ProductData(String productName, String photoURL, String userRate, String description) {
         this.productName = productName;
         this.photoURL = photoURL;
-        this.country = country;
         this.userRate = userRate;
-        this.manufacturer = manufacturer;
+        this.description = description;
     }
 
     public String getProductName() {
@@ -31,14 +29,6 @@ public class ProductData {
         this.photoURL = photoURL;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getUserRate() {
         return userRate;
     }
@@ -47,11 +37,4 @@ public class ProductData {
         this.userRate = userRate;
     }
 
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
 }

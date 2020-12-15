@@ -1,3 +1,5 @@
+import org.json.JSONException;
+
 import java.io.IOException;
 
 public class DataFetcher {
@@ -15,7 +17,7 @@ public class DataFetcher {
 
     }
 
-    public String fetch(String query) throws IOException, NoMoreAvailableCredentialsException {
+    public String fetch(String query) throws IOException, NoMoreAvailableCredentialsException, JSONException {
 
         String jsonProductData = null;
 

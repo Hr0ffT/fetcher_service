@@ -1,3 +1,5 @@
+import org.json.JSONException;
+
 import java.io.IOException;
 
 public class Runner {
@@ -10,8 +12,8 @@ public class Runner {
 
 
         try {
-            dataFetcher.fetch("4607099093508");
-        } catch (NoMoreAvailableCredentialsException e) {
+            dataFetcher.fetch("3600523086306");
+        } catch (NoMoreAvailableCredentialsException | JSONException e) {
             System.out.println("All credentials have reached day limit");
             e.printStackTrace();
         }

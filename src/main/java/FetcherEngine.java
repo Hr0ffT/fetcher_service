@@ -17,55 +17,34 @@ public class FetcherEngine {
     }
 
 
-    public ProductData findProductData(String barcode) throws IOException {
+    public ProductData findProductData(String barcode) throws IOException, JSONException {
         String jsonSearchResult = fetchSearchResultAsJson(barcode);
+
+        //        System.out.println(jsonSearchResult); //печать боди
+
         return parseProductDataFromJson(jsonSearchResult);
     }
 
     private String fetchSearchResultAsJson(String query) throws IOException {
-
-            return Jsoup.connect(targetURL + query).ignoreContentType(true).execute().body();
-
+        return Jsoup.connect(targetURL + query).ignoreContentType(true).execute().body();
     }
 
-    static ProductData parseProductDataFromJson(String json) {
-
-        ProductData productData = null;
+    static ProductData parseProductDataFromJson(String json) throws JSONException {
 
         String productName;
-        String manufacturer;
-        String country;
         String photoURL;
         String userRate;
+        String description;
 
-        try {
+        JSONObject jsonObject = new JSONObject(json);
+        JSONArray jsonArrayItems = jsonObject.getJSONArray("items");
 
+        description = jsonArrayItems.getJSONObject(0).getString("snippet").replaceAll("\\n", "");
+        photoURL = jsonArrayItems.getJSONObject(0).getJSONObject("pagemap").getJSONArray("metatags").getJSONObject(0).getString("og:image").replaceAll("\\n", "");
+        userRate = jsonArrayItems.getJSONObject(0).getJSONObject("pagemap").getJSONArray("metatags").getJSONObject(0).getString("og:description").replaceAll("\\n", "");
+        productName = jsonArrayItems.getJSONObject(0).getString("title").replaceAll("\\.", "");
 
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray jsonArrayItems = jsonObject.getJSONArray("items");
-
-            String snippet = jsonArrayItems.getJSONObject(0).getString("snippet").replaceAll("\\n", "");
-            photoURL = jsonArrayItems.getJSONObject(0).getJSONObject("pagemap").getJSONArray("metatags").getJSONObject(0).getString("og:image").replaceAll("\\n", "");
-
-            int manufacturerIndex = snippet.lastIndexOf("Производитель. ") + 15;
-            int countryIndex = snippet.indexOf(" Страна.");
-            int storageCond = snippet.indexOf(" Условия хранения.");
-
-            productName = jsonArrayItems.getJSONObject(0).getString("title").replaceAll("\\.", "");
-            manufacturer = snippet.substring(manufacturerIndex, countryIndex);
-            country = snippet.substring(countryIndex + 9, storageCond);
-
-            System.out.println(productName);
-            System.out.println(manufacturer);
-            System.out.println(country);
-            System.out.println(photoURL);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return productData;
+        return new ProductData(productName, photoURL, userRate, description);
 
     }
 

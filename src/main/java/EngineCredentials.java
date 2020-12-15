@@ -13,10 +13,10 @@ public class EngineCredentials {
     public EngineCredentials() {
         System.out.println("SearchEngineParameters init");
 
-        checkAvailableCredentials();
-
         initParametersMap();
         initFields();
+
+        checkAvailableCredentials();
 
         //        System.out.println(searchersCounter);
     }
