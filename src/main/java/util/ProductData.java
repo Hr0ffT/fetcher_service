@@ -1,4 +1,4 @@
-package fetcher;
+package util;
 
 public class ProductData {
 

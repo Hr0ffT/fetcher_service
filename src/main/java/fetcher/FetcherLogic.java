@@ -2,6 +2,7 @@ package fetcher;
 
 import org.json.JSONException;
 import org.jsoup.HttpStatusException;
+import util.ProductData;
 
 import java.io.IOException;
 
