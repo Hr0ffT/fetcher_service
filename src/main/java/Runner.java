@@ -1,3 +1,5 @@
+import fetcher.DataFetcher;
+import fetcher.NoMoreAvailableCredentialsException;
 import org.json.JSONException;
 
 import java.io.IOException;

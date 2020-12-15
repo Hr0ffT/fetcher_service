@@ -1,3 +1,5 @@
+package fetcher;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 

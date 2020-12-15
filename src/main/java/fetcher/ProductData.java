@@ -1,3 +1,5 @@
+package fetcher;
+
 public class ProductData {
 
     String productName;

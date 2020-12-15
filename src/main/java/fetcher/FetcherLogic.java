@@ -1,3 +1,4 @@
+package fetcher;
 
 import org.json.JSONException;
 import org.jsoup.HttpStatusException;

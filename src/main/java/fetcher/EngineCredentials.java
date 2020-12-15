@@ -1,3 +1,5 @@
+package fetcher;
+
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
