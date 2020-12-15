@@ -8,14 +8,21 @@ public class Runner {
 
     public static void main(String[] args) throws IOException {
 
-        final DataFetcher dataFetcher = new DataFetcher();
 
+
+        //принять запрос
+
+
+
+        final DataFetcher dataFetcher = new DataFetcher();
 
         try {
 
+            String jsonProductData = dataFetcher.fetch("4607099093508");
+
             System.out.println(
 
-                    dataFetcher.fetch("4607099093508")
+                    jsonProductData
 
             );
 
@@ -23,6 +30,13 @@ public class Runner {
             System.out.println("All credentials have reached day limit");
             e.printStackTrace();
         }
+
+
+
+
+        //отправить json
+
+
 
 
     }
