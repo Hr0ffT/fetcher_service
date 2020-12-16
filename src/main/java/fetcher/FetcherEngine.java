@@ -1,17 +1,22 @@
 package fetcher;
 
-import org.json.JSONException;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import util.Parser;
 import util.ProductData;
-
+import util.jsonhandler.JsonHandler;
 import java.io.IOException;
+
 
 public class FetcherEngine {
 
 
     private String targetURL;
     private EngineCredentials credentials;
+    private String jsonSearchResult;
 
 
     public FetcherEngine(EngineCredentials credentials) {
@@ -20,9 +25,19 @@ public class FetcherEngine {
     }
 
 
-    public ProductData findProductData(String barcode) throws IOException, JSONException {
-        String jsonSearchResult = fetchSearchResultAsJson(barcode);
-        return Parser.parseProductDataFromJson(jsonSearchResult);
+    public ProductData findProductData(String barcode) throws IOException, NoMoreAvailableCredentialsException {
+
+        fetchSearchResultAsJson(barcode);
+
+        JsonNode responseRootNode = JsonHandler.jsonStringToNode(jsonSearchResult);
+
+        String photoURL = Parser.parsePhotoURL(responseRootNode);
+        String userRate = Parser.parseUserRate(responseRootNode);
+
+        String description = fetchProductDescription(responseRootNode);
+
+        return new ProductData(photoURL, userRate, description);
+
     }
 
     public void setCredentials(EngineCredentials credentials) {
@@ -31,18 +46,40 @@ public class FetcherEngine {
     }
 
 
+    private String fetchProductDescription(JsonNode responseRootNode) throws IOException {
+        String productURL = Parser.parseProductURL(responseRootNode);
+        Document htmlDoc = Jsoup.connect(productURL).get();
+
+        String name = htmlDoc.select("h1").text();
+
+        Elements descriptionFields = htmlDoc.select("div._3Ccd");
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(name).append(" ").append("\n").append(" ");
+        for (Element descriptionField : descriptionFields) {
+            stringBuilder.append(descriptionField.text()).append(", ");
+        }
+
+        return stringBuilder.toString();
+    }
 
 
-    private String fetchSearchResultAsJson(String query) throws IOException {
-        return Jsoup.connect(targetURL + query).ignoreContentType(true).execute().body();
+    private void fetchSearchResultAsJson(String query) throws NoMoreAvailableCredentialsException {
+
+
+        try {
+            jsonSearchResult = Jsoup.connect(targetURL + query).ignoreContentType(true).execute().body();
+        } catch (IOException e) {
+            throw new NoMoreAvailableCredentialsException();
+        }
+
+
     }
 
     private void initTargetURL() {
         targetURL = String.format("https://www.googleapis.com/customsearch/v1?key=%s&cx=%s&q=",
                 this.credentials.getApiKey(), this.credentials.getCX());
     }
-
-
 
 
 }

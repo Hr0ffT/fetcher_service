@@ -1,9 +1,11 @@
 package util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import fetcher.DataFetcher;
 import fetcher.NoMoreAvailableCredentialsException;
 import org.json.JSONException;
 import receiver.Receiver;
+import util.jsonhandler.JsonHandler;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -28,39 +30,42 @@ public class Handler {
     }
 
 
-    public static void messageReceived(String messageJson) {
-//        System.out.println( messageJson);
+    public static void messageReceived(String jsonInput) {
 
         try {
 
-            //parseMessageDataFromJson
 
-            // PUT MESSAGE DATA AND PRODUCT DATA IN OUTPIUT DATA AND DESERIALIZE IN TO JSON THEN SEND
+            String barcode = getBarcodeFromInput(jsonInput);
+            String jsonProductData = findProductDataByBarcodeAsJson(barcode);
+            String outputJson = JsonHandler.putDataInJson(jsonInput, jsonProductData);
+            System.out.println(outputJson);
 
-            String barcode = getBarcodeFromMessage(messageJson);
-
-//            ProductData productData = findProductDataByBarcode(barcode);
-            String productData = findProductDataByBarcodeAsJson(barcode);
-            System.out.println(productData);
-
-
-//            System.out.println(jsonProductData);
-
-
+            //            JSONArray tg = new JSONArray(jsonInput);
+//            System.out.println(tg);
+//            JSONObject data = new JSONObject(jsonProductData);
+//
+//            JSONArray put = tg.put(data);
+//            System.out.println(put.toString());
 
 
-        } catch (JSONException | NoMoreAvailableCredentialsException | IOException e) {
+        } catch (IOException | NoMoreAvailableCredentialsException | JSONException e) {
             e.printStackTrace();
         }
 
+
+
+
+        //TODO ОТПРАВИТЬ JSON
+
+//TODO ОТПРАВЛЯТЬ ОШИБКУ, ЕСЛИ НЕ УДАЛОСЬ НАЙТИ ПРОДУКТ!!
+
+
     }
 
-    private static String getBarcodeFromMessage(String messageJson) throws JSONException {
-        return Parser.parseBarcodeFromMessage(messageJson);
-    }
 
-    private static ProductData findProductDataByBarcode(String barcode) throws JSONException, NoMoreAvailableCredentialsException, IOException {
-        return dataFetcher.fetchProductData(barcode);
+
+    private static String getBarcodeFromInput(String inputJson) throws JsonProcessingException {
+               return Parser.parseInputForBarcode(inputJson);
     }
 
     private static String findProductDataByBarcodeAsJson(String barcode) throws JSONException, NoMoreAvailableCredentialsException, IOException {

@@ -6,6 +6,7 @@ import util.ProductData;
 
 import java.io.IOException;
 
+
 public class FetcherLogic {
 
 
@@ -24,27 +25,43 @@ public class FetcherLogic {
 
     }
 
-    public ProductData startSearch(String query) throws IOException, NoMoreAvailableCredentialsException, JSONException {
+    public ProductData startSearch(String query) throws NoMoreAvailableCredentialsException {
+
         try {
 
             return fetcherEngine.findProductData(query);
 
-        } catch (HttpStatusException e) {
+        } catch (IOException | NoMoreAvailableCredentialsException e) {
+
             // When credentials have reached day limit
 
             while (thereAreAvailableCredentials) {
+
                 dataFetcher.switchEngineCredentials();
                 startSearch(query);
+
             }
 
-            for (; startAttempt < MAX_RESTART_ATTEMPTS; startAttempt++) {
-                restartSearch(query);
+            if (startAttempt < MAX_RESTART_ATTEMPTS) {
+                try {
+
+                    startAttempt++;
+                    restartSearch(query);
+
+                } catch (IOException | JSONException ioException) {
+                    ioException.printStackTrace();
+                }
             }
 
             resetAttempts();
 
-            throw new NoMoreAvailableCredentialsException();
 
+
+            // TODO SENDER ДОЛЖЕН ОТПРАВИТЬ СООБЩЕНИЕ О НЕУДАЧНОЙ ПОПЫТКЕ (НЕТ ДОСТУПНЫХ ПОИСКОВИКОВ)
+
+
+
+            throw new NoMoreAvailableCredentialsException();
         }
 
     }
@@ -52,7 +69,7 @@ public class FetcherLogic {
 
     private void restartSearch(String query) throws IOException, NoMoreAvailableCredentialsException, JSONException {
 
-        System.out.println("restarting");
+        System.out.println("restarting search");
         EngineCredentials.resetUsedCredentials();
         startSearch(query);
     }

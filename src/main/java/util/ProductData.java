@@ -2,25 +2,16 @@ package util;
 
 public class ProductData {
 
-    String productName;
     String photoURL;
-    String userRate;
     String description;
+    String userRate;
 
 
-    public ProductData(String productName, String photoURL, String userRate, String description) {
-        this.productName = productName;
+    public ProductData(String photoURL, String userRate, String description) {
+
         this.photoURL = photoURL;
         this.userRate = userRate;
         this.description = description;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     public String getPhotoURL() {

@@ -1,10 +1,10 @@
 package fetcher;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import util.ProductData;
-
+import util.jsonhandler.JsonHandler;
 import java.io.IOException;
+
 
 public class DataFetcher {
 
@@ -19,16 +19,13 @@ public class DataFetcher {
 
 
     }
-    public ProductData fetchProductData(String query) throws JSONException, NoMoreAvailableCredentialsException, IOException {
-        return fetcherLogic.startSearch(query);
-    }
+
 
     public String fetchProductDataAsJson(String query) throws IOException, NoMoreAvailableCredentialsException, JSONException {
-        ObjectMapper objectMapper = new ObjectMapper();
 
         ProductData productData = fetcherLogic.startSearch(query);
 
-        return objectMapper.writeValueAsString(productData);
+        return JsonHandler.serializeToJson(productData);
 
     }
 

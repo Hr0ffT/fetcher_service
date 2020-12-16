@@ -18,7 +18,6 @@ public class EngineCredentials {
         checkAvailableCredentials();
     }
 
-
     private void putParameters() {
 
         parametersPool.put(

@@ -1,75 +1,39 @@
 package util;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import util.jsonhandler.JsonHandler;
+
 
 public class Parser {
 
-    public static ProductData parseProductDataFromJson(String jsonSearchResult) throws JSONException {
-
-//        System.out.println(jsonSearchResult); //печать боди
-
-        String productName;
-        String photoURL;
-        String userRate;
-        String description;
-
-        JSONObject jsonObjectSearchResult = new JSONObject(jsonSearchResult);
-        JSONArray jsonArrayItems = jsonObjectSearchResult.getJSONArray("items");
-
-        description = jsonArrayItems.getJSONObject(0).getString("snippet").replaceAll("\\n", "");
-        photoURL = jsonArrayItems.getJSONObject(0).getJSONObject("pagemap").getJSONArray("metatags").getJSONObject(0).getString("og:image").replaceAll("\\n", "");
-        userRate = jsonArrayItems.getJSONObject(0).getJSONObject("pagemap").getJSONArray("metatags").getJSONObject(0).getString("og:description").replaceAll("\\n", "");
-        productName = jsonArrayItems.getJSONObject(0).getString("title").replaceAll("\\.", "");
+    public static String parseUserRate(JsonNode responseRootNode) {
+        String userRate = responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:description").asText();
 
         if (!isCorrectUserRate(userRate)) {
-            userRate = " ";
+            return " ";
         }
 
-        return new ProductData(productName, photoURL, userRate, description);
+        return userRate;
+    }
 
+    public static String parseProductURL(JsonNode responseRootNode)  {
+        return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:url").asText();
+    }
+
+    public static String parsePhotoURL(JsonNode responseRootNode) {
+        return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:image").asText();
     }
 
 
-    public static String parseBarcodeFromMessage(String jsonMessage) throws JSONException {
-
-        JSONObject jsonObjectMessage = new JSONObject(jsonMessage);
-        return   jsonObjectMessage.getJSONObject("message").getString("text");
-
+    public static String parseInputForBarcode(String jsonInput) throws JsonProcessingException {
+        return JsonHandler.jsonStringToNode(jsonInput).get("telegram_input_service").get("message").get("text").asText();
     }
-
-//    public static MessageData parseMessageDataFromJson(String receivedMessage) {
-//
-//        String userName;
-//        String tgLink;
-//        String userID;
-//        String languageCode;
-//
-//        String messageDate;
-//        String messageTime;
-//        String chatID;
-//        String updateID;
-//
-//
-//
-//
-////        v4.json
-//
-//
-//
-//    }
-
-
-
-
 
 
     private static boolean isCorrectUserRate(String userRate) {
         return userRate.contains("★");
     }
-
-
 
 
 }
