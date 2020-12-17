@@ -19,23 +19,25 @@ public class Receiver {
     private final static String MQ_HOST = "wave3252.ddns.net";
 
 
-    ConnectionFactory connectionFactory;
-    Connection connection;
-    Channel channel;
-    String receivedMessage;
-    DataFetcher dataFetcher;
+    private final Channel channel;
+    private static String receivedMessage;
+
+    private long deliveryTag;
 
 
-    public Receiver(DataFetcher dataFetcher) throws IOException, TimeoutException {
-        this.connectionFactory = new ConnectionFactory();
-        this.dataFetcher = dataFetcher;
-        this.connectionFactory.setUsername(RECEIVER_USER_NAME);
-        this.connectionFactory.setPassword(RECEIVER_PASSWORD);
-        this.connectionFactory.setHost(MQ_HOST);
-        this.connection = connectionFactory.newConnection();
+    private Receiver() throws IOException, TimeoutException {
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setUsername(RECEIVER_USER_NAME);
+        connectionFactory.setPassword(RECEIVER_PASSWORD);
+        connectionFactory.setHost(MQ_HOST);
+        Connection connection = connectionFactory.newConnection();
         this.channel = connection.createChannel();
 
         startMessageReceiving();
+    }
+
+    public static Receiver initReceiver() throws IOException, TimeoutException {
+        return new Receiver();
     }
 
 
@@ -54,9 +56,14 @@ public class Receiver {
             public void handleDelivery(String consumerTag, Envelope envelope,
                                        AMQP.BasicProperties properties, byte[] body) {
 
+                deliveryTag = envelope.getDeliveryTag();
                 decodeMessage(body);
 
-                Handler.messageReceived( receivedMessage);
+                try {
+                    Handler.messageReceived( receivedMessage);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
 
 
             }
@@ -69,21 +76,39 @@ public class Receiver {
 
 // TODO СДЕЛАТЬ ПОДТВЕРЖДЕНИЕ ОБ ОТПРАВКЕ, КОД НИЖЕ
 
-    //    private DefaultConsumer ConsumerWithACK() {
-    //        return new DefaultConsumer(channel) {
-    //            @Override
-    //            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-    //
-    //                long deliveryTag = envelope.getDeliveryTag();
-    //
-    //                decodeMessage(body);
-    //                Handler.messageReceived(receivedMessage);
-    //
-    //                channel.basicAck(deliveryTag, false);
-    //
-    //            }
-    //        };
-    //    }
+//        private DefaultConsumer ConsumerWithACK() {
+//            return new DefaultConsumer(channel) {
+//                @Override
+//                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+//
+//                    long deliveryTag = envelope.getDeliveryTag();
+//
+//                    decodeMessage(body);
+//                    Handler.messageReceived(receivedMessage);
+//
+//                    channel.basicAck(deliveryTag, false);
+//
+//                }
+//            };
+//        }
+
+        public long getDeliveryTag() {
+        return deliveryTag;
+        }
+
+        public Channel getChannel() {
+        return channel;
+        }
+
+        public void confirm(){
+            try {
+                channel.basicAck(deliveryTag, false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
 
 
 }

@@ -5,6 +5,7 @@ import fetcher.DataFetcher;
 import fetcher.CredentialsDayLimitException;
 import org.json.JSONException;
 import receiver.Receiver;
+import sender.Sender;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -14,61 +15,110 @@ public class Handler {
     private static boolean initialized = false;
 
 
-    private static Receiver receiver;
+    //    private static Receiver receiver;
     private static DataFetcher dataFetcher;
-    //    Sender sender;
+    private static Sender sender;
+
+    private static String barcode;
+    private static String jsonProductData;
+    private static String jsonInput;
+    private static String jsonOutput;
 
 
     public static void initProgram() throws IOException, TimeoutException {
         if (!initialized) {
             dataFetcher = new DataFetcher();
-            receiver = new Receiver(dataFetcher);
+            Receiver receiver = initReceiver();
+            sender = new Sender(receiver);
 
             initialized = true;
         }
     }
 
-
-    public static void messageReceived(String jsonInput) {
-
-        try {
-
-
-            String barcode = getBarcodeFromInput(jsonInput);
-            String jsonProductData = findProductDataByBarcodeAsJson(barcode);
-            String outputJson = JsonHandler.putDataInJson(jsonInput, jsonProductData);
-            System.out.println(outputJson);
-
-            //            JSONArray tg = new JSONArray(jsonInput);
-//            System.out.println(tg);
-//            JSONObject data = new JSONObject(jsonProductData);
-//
-//            JSONArray put = tg.put(data);
-//            System.out.println(put.toString());
+    private static Receiver initReceiver() throws IOException, TimeoutException {
+        return Receiver.initReceiver();
+    }
 
 
-        } catch (IOException | CredentialsDayLimitException | JSONException e) {
-            e.printStackTrace();
+    public static void messageReceived(String jsonInputMessage) throws JsonProcessingException {
+        jsonInput = jsonInputMessage;
+
+        getBarcodeFromInput(jsonInput);
+
+        if (isCorrectBarcode()) {
+            System.out.println(" BARCODE IS OK " + barcode);
+            findProductDataByBarcodeAsJson(barcode);
+        } else  {
+
+            System.out.println("Запрос - говно!");
+            jsonProductData = JsonHandler.serializeToJson(new ProductData(" ", " ", "ВАШ ЗАПРОС ГОВНО!"));
+
+
+
         }
+        System.out.println("Пошел на отправку!");
+        prepareOutputJson();
+        sendOutputJson();
 
 
+        //ОТПРАВЛЯЕМ!!!!
+
+
+        //            JSONArray tg = new JSONArray(jsonInput);
+        //            System.out.println(tg);
+        //            JSONObject data = new JSONObject(jsonProductData);
+        //
+        //            JSONArray put = tg.put(data);
+        //            System.out.println(put.toString());
 
 
         //TODO ОТПРАВИТЬ JSON
 
-//TODO ОТПРАВЛЯТЬ ОШИБКУ, ЕСЛИ НЕ УДАЛОСЬ НАЙТИ ПРОДУКТ!!
+        //TODO ОТПРАВЛЯТЬ ОШИБКУ, ЕСЛИ НЕ УДАЛОСЬ НАЙТИ ПРОДУКТ!!
 
 
     }
 
-
-
-    private static String getBarcodeFromInput(String inputJson) throws JsonProcessingException {
-               return Parser.parseInputForBarcode(inputJson);
+    private static void prepareOutputJson() {
+        try {
+            jsonOutput = JsonHandler.putDataInJson(jsonInput, jsonProductData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static String findProductDataByBarcodeAsJson(String barcode) throws JSONException, CredentialsDayLimitException, IOException {
-        return dataFetcher.fetchProductDataAsJson(barcode);
+    private static void sendOutputJson() {
+        sender.send(jsonOutput);
+    }
+
+
+    private static void getBarcodeFromInput(String inputJson) {
+        try {
+            barcode = Parser.parseInputForBarcode(inputJson);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void findProductDataByBarcodeAsJson(String barcode) {
+        try {
+            jsonProductData = dataFetcher.fetchProductDataAsJson(barcode);
+        } catch (IOException | CredentialsDayLimitException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean isCorrectBarcode() {
+
+
+        try {
+            Integer.parseInt(barcode);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+
     }
 
 }
