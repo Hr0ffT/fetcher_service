@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class EngineCredentials {
+public class Credentials {
 
     String cx;
     String apiKey;
@@ -12,8 +12,10 @@ public class EngineCredentials {
 
     private static int credentialsUsed = 0;
 
-    public EngineCredentials() {
-        initParametersMap();
+    public Credentials() {
+        if (parametersPool == null) {
+            initParametersMap();
+        }
         initFields();
         checkAvailableCredentials();
     }
@@ -25,6 +27,9 @@ public class EngineCredentials {
         );
         parametersPool.put(
                 "6ff535218ad7fe3ba", "AIzaSyC8KNeuOz61wQlj6202MYO3piEbSDdw9rc"
+        );
+        parametersPool.put(
+                "b5931624bb8243dd1", "AIzaSyAWtl7WJNi_Kyw2QW_DZPTlfawEaMFaDhI"
         );
 
 
@@ -39,17 +44,23 @@ public class EngineCredentials {
     private void initFields() {
 
         Iterator<Map.Entry<String, String>> iterator = parametersPool.entrySet().iterator();
-        Map.Entry<String, String> entry = iterator.next();
+        Map.Entry<String, String> entry;
 
 
-        if (credentialsUsed < parametersPool.size()) {
-            for (int i = 1; i <= credentialsUsed; i++) {
+
+        if (credentialsUsed < parametersPool.size()+1) {
+            System.out.println("Есть доступные варианты");
+            for (int i = 0; i <= credentialsUsed; i++) {
                 entry = iterator.next();
+                System.out.println("ENTRY " + entry);
+                this.cx = entry.getKey();
+                this.apiKey = entry.getValue();
             }
 
-            this.cx = entry.getKey();
-            this.apiKey = entry.getValue();
 
+
+            System.out.println("Initializing new credentials: " + cx + " " + apiKey);
+            checkAvailableCredentials();
             credentialsUsed++;
 
         } else {
@@ -61,11 +72,12 @@ public class EngineCredentials {
 
     public static void resetUsedCredentials() {
         credentialsUsed = 0;
-        checkAvailableCredentials();
+        System.out.println("Resetting used credentials");
+
     }
 
     public static void checkAvailableCredentials() {
-        FetcherLogic.thereAreAvailableCredentials = credentialsUsed < poolSize();
+        Logic.thereAreAvailableCredentials = credentialsUsed < poolSize()+1;
     }
 
 

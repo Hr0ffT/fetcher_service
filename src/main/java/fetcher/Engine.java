@@ -7,25 +7,25 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import util.Parser;
 import util.ProductData;
-import util.jsonhandler.JsonHandler;
+import util.JsonHandler;
 import java.io.IOException;
 
 
-public class FetcherEngine {
+public class Engine {
 
 
     private String targetURL;
-    private EngineCredentials credentials;
+    private Credentials credentials;
     private String jsonSearchResult;
 
 
-    public FetcherEngine(EngineCredentials credentials) {
+    public Engine(Credentials credentials) {
         this.credentials = credentials;
         initTargetURL();
     }
 
 
-    public ProductData findProductData(String barcode) throws IOException, NoMoreAvailableCredentialsException {
+    public ProductData findProductData(String barcode) throws IOException, CredentialsDayLimitException {
 
         fetchSearchResultAsJson(barcode);
 
@@ -40,7 +40,8 @@ public class FetcherEngine {
 
     }
 
-    public void setCredentials(EngineCredentials credentials) {
+    public void setCredentials(Credentials credentials) {
+
         this.credentials = credentials;
         initTargetURL();
     }
@@ -64,13 +65,13 @@ public class FetcherEngine {
     }
 
 
-    private void fetchSearchResultAsJson(String query) throws NoMoreAvailableCredentialsException {
+    private void fetchSearchResultAsJson(String query) throws CredentialsDayLimitException {
 
 
         try {
             jsonSearchResult = Jsoup.connect(targetURL + query).ignoreContentType(true).execute().body();
         } catch (IOException e) {
-            throw new NoMoreAvailableCredentialsException();
+            throw new CredentialsDayLimitException();
         }
 
 

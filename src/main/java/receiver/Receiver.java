@@ -5,7 +5,7 @@ import com.rabbitmq.client.*;
 import fetcher.DataFetcher;
 import org.json.JSONException;
 import util.Handler;
-import util.TestJson;
+
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

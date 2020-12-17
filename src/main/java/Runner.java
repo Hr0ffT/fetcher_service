@@ -1,6 +1,3 @@
-import fetcher.DataFetcher;
-import fetcher.NoMoreAvailableCredentialsException;
-import org.json.JSONException;
 import util.Handler;
 
 import java.io.IOException;
@@ -12,7 +9,6 @@ public class Runner {
     public static void main(String[] args) throws IOException, TimeoutException {
 
        Handler.initProgram();
-
 
 
 

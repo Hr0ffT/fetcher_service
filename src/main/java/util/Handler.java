@@ -2,10 +2,9 @@ package util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import fetcher.DataFetcher;
-import fetcher.NoMoreAvailableCredentialsException;
+import fetcher.CredentialsDayLimitException;
 import org.json.JSONException;
 import receiver.Receiver;
-import util.jsonhandler.JsonHandler;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -48,7 +47,7 @@ public class Handler {
 //            System.out.println(put.toString());
 
 
-        } catch (IOException | NoMoreAvailableCredentialsException | JSONException e) {
+        } catch (IOException | CredentialsDayLimitException | JSONException e) {
             e.printStackTrace();
         }
 
@@ -68,7 +67,7 @@ public class Handler {
                return Parser.parseInputForBarcode(inputJson);
     }
 
-    private static String findProductDataByBarcodeAsJson(String barcode) throws JSONException, NoMoreAvailableCredentialsException, IOException {
+    private static String findProductDataByBarcodeAsJson(String barcode) throws JSONException, CredentialsDayLimitException, IOException {
         return dataFetcher.fetchProductDataAsJson(barcode);
     }
 

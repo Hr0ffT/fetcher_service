@@ -2,40 +2,41 @@ package fetcher;
 
 import org.json.JSONException;
 import util.ProductData;
-import util.jsonhandler.JsonHandler;
+import util.JsonHandler;
 import java.io.IOException;
 
 
 public class DataFetcher {
 
-    private final FetcherLogic fetcherLogic;
-    private final FetcherEngine fetcherEngine;
-    EngineCredentials credentials;
+    private final Logic logic;
+    private final Engine engine;
+    Credentials credentials;
 
     public DataFetcher() {
-        this.credentials = new EngineCredentials();
-        this.fetcherEngine = new FetcherEngine(credentials);
-        this.fetcherLogic = new FetcherLogic(this);
+        this.credentials = new Credentials();
+        this.engine = new Engine(credentials);
+        this.logic = new Logic(this);
 
 
     }
 
 
-    public String fetchProductDataAsJson(String query) throws IOException, NoMoreAvailableCredentialsException, JSONException {
+    public String fetchProductDataAsJson(String query) throws IOException, CredentialsDayLimitException, JSONException {
 
-        ProductData productData = fetcherLogic.startSearch(query);
+        ProductData productData = logic.startSearch(query);
 
         return JsonHandler.serializeToJson(productData);
 
     }
 
 
-    public FetcherEngine getFetcherEngine() {
-        return fetcherEngine;
+    public Engine getFetcherEngine() {
+        return engine;
     }
 
     public void switchEngineCredentials() {
-        fetcherEngine.setCredentials(new EngineCredentials());
+        System.out.println("Switching credentials");
+        engine.setCredentials(new Credentials());
     }
 
 
