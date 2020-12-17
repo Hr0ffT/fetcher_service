@@ -3,7 +3,7 @@ package sender;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import fetcher.DataFetcher;
+
 import receiver.Receiver;
 
 import java.io.IOException;

@@ -1,8 +1,7 @@
 package fetcher;
 
-import org.json.JSONException;
-import util.ProductData;
 
+import util.ProductData;
 import java.io.IOException;
 
 
@@ -141,7 +140,6 @@ return null;
 
 
 
-
     private void trySearch() throws CredentialsDayLimitException {
         try {
             System.out.println("Ищем " + query);
@@ -164,56 +162,6 @@ return null;
     private static void resetAttempts() {
         startAttempt = 0;
     }
-
-//    public ProductData startSearch2(String barcode) throws CredentialsDayLimitException {
-//        this.query = barcode;
-//        System.out.println("Starting search");
-//        try {
-//
-//            return engine.findProductData(query);
-//
-//        } catch (IOException | CredentialsDayLimitException e) {
-//
-//            // When credentials have reached day limit
-//
-//            if (thereAreAvailableCredentials) {
-//                System.out.println("WHILE BLOCK");
-//                dataFetcher.switchEngineCredentials();
-//                startSearch(query);
-//
-//            }
-//
-//            if (startAttempt < MAX_RESTART_ATTEMPTS) {
-//                try {
-//
-//                    System.out.println("start attempt = " + startAttempt);
-//                    startAttempt++;
-//                    restartSearch(query);
-//
-//                } catch (IOException | JSONException ioException) {
-//                    ioException.printStackTrace();
-//                }
-//            }
-//
-//            resetAttempts();
-//
-//
-//            System.out.println(query);
-//            throw new CredentialsDayLimitException();
-//
-//        }
-//
-//
-//    }
-
-
-//    private void restartSearch(String query) throws IOException, CredentialsDayLimitException, JSONException {
-//
-//        System.out.println("restarting search");
-//        Credentials.resetUsedCredentials();
-//        startSearch(query);
-//    }
-//
 
 
 

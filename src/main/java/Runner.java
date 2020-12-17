@@ -10,33 +10,7 @@ public class Runner {
 
        Handler.initProgram();
 
-
-
-
-
-
-        //отправить json
-
-
     }
-
-//    private void fetch(DataFetcher dataFetcher) {
-//        try {
-//
-//            String jsonProductData = dataFetcher.fetch("4607099093508");
-//
-//            System.out.println(
-//
-//                    jsonProductData
-//
-//            );
-//
-//        } catch (NoMoreAvailableCredentialsException | JSONException | IOException e) {
-//            System.out.println("All credentials have reached day limit");
-//            e.printStackTrace();
-//        }
-//
-//    }
 
 
 }

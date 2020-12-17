@@ -14,8 +14,6 @@ public class Handler {
 
     private static boolean initialized = false;
 
-
-    //    private static Receiver receiver;
     private static DataFetcher dataFetcher;
     private static Sender sender;
 
@@ -48,11 +46,10 @@ public class Handler {
         if (isCorrectBarcode()) {
             System.out.println(" BARCODE IS OK " + barcode);
             findProductDataByBarcodeAsJson(barcode);
-        } else  {
+        } else {
 
             System.out.println("Запрос - говно!");
             jsonProductData = JsonHandler.serializeToJson(new ProductData(" ", " ", "ВАШ ЗАПРОС ГОВНО!"));
-
 
 
         }
@@ -63,16 +60,6 @@ public class Handler {
 
         //ОТПРАВЛЯЕМ!!!!
 
-
-        //            JSONArray tg = new JSONArray(jsonInput);
-        //            System.out.println(tg);
-        //            JSONObject data = new JSONObject(jsonProductData);
-        //
-        //            JSONArray put = tg.put(data);
-        //            System.out.println(put.toString());
-
-
-        //TODO ОТПРАВИТЬ JSON
 
         //TODO ОТПРАВЛЯТЬ ОШИБКУ, ЕСЛИ НЕ УДАЛОСЬ НАЙТИ ПРОДУКТ!!
 

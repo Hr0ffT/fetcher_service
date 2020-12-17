@@ -2,8 +2,6 @@ package receiver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rabbitmq.client.*;
-import fetcher.DataFetcher;
-import org.json.JSONException;
 import util.Handler;
 
 
@@ -60,7 +58,7 @@ public class Receiver {
                 decodeMessage(body);
 
                 try {
-                    Handler.messageReceived( receivedMessage);
+                    Handler.messageReceived(receivedMessage);
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
@@ -74,41 +72,18 @@ public class Receiver {
         receivedMessage = new String(body, StandardCharsets.UTF_8);
     }
 
-// TODO СДЕЛАТЬ ПОДТВЕРЖДЕНИЕ ОБ ОТПРАВКЕ, КОД НИЖЕ
 
-//        private DefaultConsumer ConsumerWithACK() {
-//            return new DefaultConsumer(channel) {
-//                @Override
-//                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-//
-//                    long deliveryTag = envelope.getDeliveryTag();
-//
-//                    decodeMessage(body);
-//                    Handler.messageReceived(receivedMessage);
-//
-//                    channel.basicAck(deliveryTag, false);
-//
-//                }
-//            };
-//        }
-
-        public long getDeliveryTag() {
-        return deliveryTag;
-        }
-
-        public Channel getChannel() {
+    public Channel getChannel() {
         return channel;
+    }
+
+    public void confirm() {
+        try {
+            channel.basicAck(deliveryTag, false);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        public void confirm(){
-            try {
-                channel.basicAck(deliveryTag, false);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
+    }
 
 
 }
