@@ -5,9 +5,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import util.JsonHandler;
 import util.Parser;
 import util.ProductData;
-import util.JsonHandler;
 
 import java.io.IOException;
 

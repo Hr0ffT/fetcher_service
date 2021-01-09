@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rabbitmq.client.*;
 import util.Handler;
 
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
@@ -12,8 +11,8 @@ import java.util.concurrent.TimeoutException;
 public class Receiver {
 
     private final static String QUEUE_NAME = "tg_votbarcode_msg_input";
-    private final static String RECEIVER_USER_NAME = "barcode_receiver";
-    private final static String RECEIVER_PASSWORD = "JavaBCRcvr";
+    private final static String RECEIVER_USER_NAME = "fetcher_service";
+    private final static String RECEIVER_PASSWORD = "JavaFSvc";
     private final static String MQ_HOST = "wave3252.ddns.net";
 
 

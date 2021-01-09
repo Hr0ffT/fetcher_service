@@ -1,11 +1,15 @@
 package util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import fetcher.DataFetcher;
+import sender.Sender;
 import fetcher.CredentialsDayLimitException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+
 import org.json.JSONException;
 import receiver.Receiver;
-import sender.Sender;
+
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

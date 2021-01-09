@@ -47,8 +47,7 @@ public class Credentials {
         Map.Entry<String, String> entry;
 
 
-
-        if (credentialsUsed < parametersPool.size()+1) {
+        if (credentialsUsed < parametersPool.size() + 1) {
             System.out.println("Есть доступные варианты");
             for (int i = 0; i <= credentialsUsed; i++) {
                 entry = iterator.next();
@@ -56,7 +55,6 @@ public class Credentials {
                 this.cx = entry.getKey();
                 this.apiKey = entry.getValue();
             }
-
 
 
             System.out.println("Initializing new credentials: " + cx + " " + apiKey);
@@ -77,7 +75,7 @@ public class Credentials {
     }
 
     public static void checkAvailableCredentials() {
-        Logic.thereAreAvailableCredentials = credentialsUsed < poolSize()+1;
+        Logic.thereAreAvailableCredentials = credentialsUsed < poolSize() + 1;
     }
 
 

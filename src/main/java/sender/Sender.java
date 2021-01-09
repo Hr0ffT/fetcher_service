@@ -43,14 +43,14 @@ public class Sender {
 
     public void send(String jsonOutput) {
 
-//        System.out.println(jsonOutput);
+        System.out.println(jsonOutput);
 
-        try {
-            outputChannel.basicPublish("", OUTPUT_QUEUE, null, jsonOutput.getBytes());
-            receiver.confirm();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //        try {
+        //            outputChannel.basicPublish("", OUTPUT_QUEUE, null, jsonOutput.getBytes());
+        //            receiver.confirm();
+        //        } catch (IOException e) {
+        //            e.printStackTrace();
+        //        }
 
 
     }

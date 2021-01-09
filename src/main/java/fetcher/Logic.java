@@ -2,6 +2,7 @@ package fetcher;
 
 
 import util.ProductData;
+
 import java.io.IOException;
 
 
@@ -43,20 +44,21 @@ public class Logic {
 
             handleDayLimitException(); //  ------------------------------->   Вот тут - - -> |
         }               //                                                                   |
-//                                                                                           |
-//                                                                                           |
+        //                                                                                           |
+        //                                                                                           |
         System.out.println("сценарий #1 -  все хорошо, возвращаем данные");  //              |
         return productData;                                                  //              |
-                                                                            //               |
+        //               |
     }    //                                                                                  |
-//                                                                                           |
+
+    //                                                                                           |
     private ProductData handleDayLimitException() {  // <--------- Вот же он!! <- - - - - -  |
 
 
         //сценарий #2 -  закончились попытки поиска у ключа
 
 
-                  // ЧТО ДЕЛАТЬ?!??!
+        // ЧТО ДЕЛАТЬ?!??!
 
 
         //спокуха!
@@ -66,49 +68,45 @@ public class Logic {
         // пробуем поискать с разными ключами!
         tryToSearchWithDifferentKey();
 
-    //проверим результат:
+        //проверим результат:
 
-        if(!searchAttemptFailed)
+        if (!searchAttemptFailed) {
 
-    {
+            System.out.println("Мы все нашли, передаем данные!");
 
-        System.out.println("Мы все нашли, передаем данные!");
-
-        return productData;
-    }
+            return productData;
+        }
 
 
-    // Если до сюда дошли, значит - пизда:
+        // Если до сюда дошли, значит - пизда:
 
 
-    // Сценарий #3 -  самый плохой!
+        // Сценарий #3 -  самый плохой!
 
 
         System.out.println("Сценарий #3 -  самый плохой!");
         System.out.println("Все ключи израсходованы!");
 
 
-    //
-    //
-    //
-    //                ХУЛЕ ДЕЛАТЬ?!?!?!??!?!!?!??!
-    //
-    //// TODO SENDER ДОЛЖЕН ОТПРАВИТЬ СООБЩЕНИЕ О НЕУДАЧНОЙ ПОПЫТКЕ (НЕТ ДОСТУПНЫХ ПОИСКОВИКОВ)
-    //
-    //
+        //
+        //
+        //
+        //                ХУЛЕ ДЕЛАТЬ?!?!?!??!?!!?!??!
+        //
+        //// TODO SENDER ДОЛЖЕН ОТПРАВИТЬ СООБЩЕНИЕ О НЕУДАЧНОЙ ПОПЫТКЕ (НЕТ ДОСТУПНЫХ ПОИСКОВИКОВ)
+        //
+        //
 
 
         System.out.println("У всех ключей кончились попытки, мы нихера не нашли!!");
 
 
-    // ТВАЮ МАТЬ!!
+        // ТВАЮ МАТЬ!!
 
-return null;
-//хуй вам че вернем, в этом случае, зовите админа, пусть ищет новые креденшелы, а я ВСЕ!
+        return null;
+        //хуй вам че вернем, в этом случае, зовите админа, пусть ищет новые креденшелы, а я ВСЕ!
 
-}
-
-
+    }
 
 
     private void tryToSearchWithDifferentKey() {
@@ -139,7 +137,6 @@ return null;
     }
 
 
-
     private void trySearch() throws CredentialsDayLimitException {
         try {
             System.out.println("Ищем " + query);
@@ -162,7 +159,6 @@ return null;
     private static void resetAttempts() {
         startAttempt = 0;
     }
-
 
 
 }

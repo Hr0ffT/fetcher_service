@@ -16,7 +16,7 @@ public class Parser {
         return userRate;
     }
 
-    public static String parseProductURL(JsonNode responseRootNode)  {
+    public static String parseProductURL(JsonNode responseRootNode) {
         return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:url").asText();
     }
 

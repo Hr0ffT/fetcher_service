@@ -1,8 +1,9 @@
 package fetcher;
 
 import org.json.JSONException;
-import util.ProductData;
 import util.JsonHandler;
+import util.ProductData;
+
 import java.io.IOException;
 
 
