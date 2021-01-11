@@ -40,35 +40,25 @@ public class Logic {
         } catch (CredentialsDayLimitException e) {
             System.out.println("сценарий #2 - у активированного ключа закончились попытки поиска");
 
-            //Ниче страшного, есть для этого механизм!
-
-            handleDayLimitException(); //  ------------------------------->   Вот тут - - -> |
-        }               //                                                                   |
-        //                                                                                           |
-        //                                                                                           |
-        System.out.println("сценарий #1 -  все хорошо, возвращаем данные");  //              |
-        return productData;                                                  //              |
-        //               |
-    }    //                                                                                  |
-
-    //                                                                                           |
-    private ProductData handleDayLimitException() {  // <--------- Вот же он!! <- - - - - -  |
 
 
-        //сценарий #2 -  закончились попытки поиска у ключа
+            handleDayLimitException();
+        }
+
+        System.out.println("сценарий #1 -  все хорошо, возвращаем данные");
+        return productData;
+    }
+    private ProductData handleDayLimitException() {
 
 
-        // ЧТО ДЕЛАТЬ?!??!
 
-
-        //спокуха!
         System.out.println("Пробуем поменять ключ на другой");
 
 
-        // пробуем поискать с разными ключами!
+
         tryToSearchWithDifferentKey();
 
-        //проверим результат:
+
 
         if (!searchAttemptFailed) {
 
@@ -78,40 +68,30 @@ public class Logic {
         }
 
 
-        // Если до сюда дошли, значит - пизда:
-
-
-        // Сценарий #3 -  самый плохой!
 
 
         System.out.println("Сценарий #3 -  самый плохой!");
         System.out.println("Все ключи израсходованы!");
 
 
-        //
-        //
-        //
-        //                ХУЛЕ ДЕЛАТЬ?!?!?!??!?!!?!??!
-        //
+
         //// TODO SENDER ДОЛЖЕН ОТПРАВИТЬ СООБЩЕНИЕ О НЕУДАЧНОЙ ПОПЫТКЕ (НЕТ ДОСТУПНЫХ ПОИСКОВИКОВ)
-        //
-        //
+
 
 
         System.out.println("У всех ключей кончились попытки, мы нихера не нашли!!");
 
 
-        // ТВАЮ МАТЬ!!
 
         return null;
-        //хуй вам че вернем, в этом случае, зовите админа, пусть ищет новые креденшелы, а я ВСЕ!
+
 
     }
 
 
     private void tryToSearchWithDifferentKey() {
 
-        //            На всякий случай сделаем это несколько раз
+
         for (; startAttempt < MAX_RESTART_ATTEMPTS; startAttempt++) {
             System.out.println("Попытка номер: " + startAttempt + "!");
 
