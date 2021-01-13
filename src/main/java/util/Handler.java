@@ -1,25 +1,22 @@
 package util;
 
-import fetcher.DataFetcher;
-import sender.Sender;
-import fetcher.CredentialsDayLimitException;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-
-
+import fetcher.CredentialsDayLimitException;
+import fetcher.DataFetcher;
 import org.json.JSONException;
-import receiver.Receiver;
-
+import rabbit.Rabbit;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 public class Handler {
 
+    private static Rabbit rabbit;
+
     private static boolean initialized = false;
 
     private static DataFetcher dataFetcher;
-    private static Sender sender;
+
 
     private static String barcode;
     private static String jsonProductData;
@@ -29,17 +26,14 @@ public class Handler {
 
     public static void initProgram() throws IOException, TimeoutException {
         if (!initialized) {
+            rabbit = new Rabbit();
             dataFetcher = new DataFetcher();
-            Receiver receiver = initReceiver();
-            sender = new Sender(receiver);
 
             initialized = true;
         }
     }
 
-    private static Receiver initReceiver() throws IOException, TimeoutException {
-        return Receiver.initReceiver();
-    }
+
 
 
     public static void messageReceived(String jsonInputMessage) throws JsonProcessingException {
@@ -79,7 +73,7 @@ public class Handler {
     }
 
     private static void sendOutputJson() {
-        sender.send(jsonOutput);
+        rabbit.send(jsonOutput);
     }
 
 

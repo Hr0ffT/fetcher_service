@@ -20,6 +20,7 @@ public class Credentials {
         checkAvailableCredentials();
     }
 
+//todo переделать
 
     private void putParameters() {
 
