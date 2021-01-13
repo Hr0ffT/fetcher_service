@@ -1,6 +1,7 @@
 package util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
@@ -9,6 +10,8 @@ import rabbit.MQData;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class JsonHandler {
@@ -20,6 +23,12 @@ public class JsonHandler {
 
         return objectMapper.readValue(mqDataPath.toFile(), MQData.class);
 
+    }
+
+    public static Map<String, String> jsonFileToMap(Path jsonFilePath) throws IOException {
+
+        return objectMapper.readValue(jsonFilePath.toFile(), new TypeReference<LinkedHashMap<String, String>>() {
+        });
     }
 
     private static ObjectMapper getDefaultObjectMapper() {
