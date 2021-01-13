@@ -80,7 +80,6 @@ public class Handler {
     private static void getBarcodeFromInput(String inputJson) {
         try {
             barcode = Parser.parseInputForBarcode(inputJson);
-            System.out.println(barcode);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -98,9 +97,7 @@ public class Handler {
 
 
         try {
-            Long.parseLong(barcode);
-            System.out.println(barcode);
-            //TODO переписать под image processing service
+            Integer.parseInt(barcode);
             return true;
         } catch (NumberFormatException e) {
             return false;

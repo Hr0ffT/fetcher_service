@@ -1,18 +1,13 @@
 package fetcher;
 
-import util.JsonHandler;
-
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Credentials {
 
     String cx;
     String apiKey;
-
-    private static final Path credentialsJsonPath = Path.of("resources/credentials.json");
     private static Map<String, String> parametersPool;
 
     private static int credentialsUsed = 0;
@@ -27,14 +22,25 @@ public class Credentials {
 
 //todo переделать
 
+    private void putParameters() {
+
+        parametersPool.put(
+                "b16555d6478b893e4", "AIzaSyAu25Ye0uxJEjJcLvIZj8YZJF1a82vdInQ"
+        );
+        parametersPool.put(
+                "6ff535218ad7fe3ba", "AIzaSyC8KNeuOz61wQlj6202MYO3piEbSDdw9rc"
+        );
+        parametersPool.put(
+                "b5931624bb8243dd1", "AIzaSyAWtl7WJNi_Kyw2QW_DZPTlfawEaMFaDhI"
+        );
+
+
+    }
+
 
     private void initParametersMap() {
-        try {
-            parametersPool = JsonHandler.jsonFileToMap(credentialsJsonPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        parametersPool = new LinkedHashMap<>();
+        putParameters();
     }
 
     private void initFields() {

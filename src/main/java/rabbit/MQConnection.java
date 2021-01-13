@@ -21,6 +21,7 @@ public class MQConnection {
 
     private MQConnection() throws IOException, TimeoutException {
         mqData = readMQDataFromFile();
+        System.out.println(mqData);
 
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setUsername(mqData.getUSER_NAME());
