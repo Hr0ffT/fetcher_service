@@ -2,38 +2,39 @@ package rabbit;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
+import util.JsonHandler;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.TimeoutException;
 
 public class MQConnection {
 
-    private final static String INPUT_QUEUE = "tg_votbarcode_msg_input";
-    private final static String OUTPUT_QUEUE = "tg_votbarcode_msg_barcode";
-    private final static String USER_NAME = "fetcher_service";
-    private final static String PASSWORD = "JavaFSvc";
-    private final static String MQ_HOST = "wave3252.ddns.net";
+
+    private static MQData mqData;
+    private final Path mqDataFilePath = Path.of("resources/mqdata.json");
 
     private final Channel inputChannel;
     private final Channel outputChannel;
 
-    com.rabbitmq.client.Connection connection;
-
-
     private long deliveryTag;
 
-
-
-
     private MQConnection() throws IOException, TimeoutException {
+        mqData = readMQDataFromFile();
+        System.out.println(mqData);
+
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUsername(USER_NAME);
-        connectionFactory.setPassword(PASSWORD);
-        connectionFactory.setHost(MQ_HOST);
+        connectionFactory.setUsername(mqData.getUSER_NAME());
+        connectionFactory.setPassword(mqData.getPASSWORD());
+        connectionFactory.setHost(mqData.getMQ_HOST());
         com.rabbitmq.client.Connection connection = connectionFactory.newConnection();
         this.inputChannel = connection.createChannel();
         this.outputChannel = connection.createChannel();
 
+    }
+
+    private MQData readMQDataFromFile() throws IOException {
+        return JsonHandler.deserializeMQData(mqDataFilePath);
     }
 
     public static MQConnection initRabbitConnection() throws IOException, TimeoutException {
@@ -50,11 +51,11 @@ public class MQConnection {
     }
 
     public static String getInputQueue() {
-        return INPUT_QUEUE;
+        return mqData.getINPUT_QUEUE();
     }
 
     public static String getOutputQueue() {
-        return OUTPUT_QUEUE;
+        return mqData.getOUTPUT_QUEUE();
     }
 
     public Channel getInputChannel() {

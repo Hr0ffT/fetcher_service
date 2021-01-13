@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
+import rabbit.MQData;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 
 public class JsonHandler {
@@ -12,6 +16,11 @@ public class JsonHandler {
 
     private static final ObjectMapper objectMapper = getDefaultObjectMapper();
 
+    public static MQData deserializeMQData(Path mqDataPath) throws IOException {
+
+        return objectMapper.readValue(mqDataPath.toFile(), MQData.class);
+
+    }
 
     private static ObjectMapper getDefaultObjectMapper() {
         ObjectMapper defaultMapper = new ObjectMapper();

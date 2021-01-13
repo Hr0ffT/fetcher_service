@@ -3,8 +3,6 @@ package rabbit.sender;
 import com.rabbitmq.client.Channel;
 import rabbit.MQConnection;
 
-import java.io.IOException;
-
 public class Sender {
 
     MQConnection connection;
@@ -25,12 +23,12 @@ public class Sender {
 
         System.out.println(jsonOutput);
 
-                try {
-                    outputChannel.basicPublish("", OUTPUT_QUEUE, null, jsonOutput.getBytes());
-                    connection.confirm();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    outputChannel.basicPublish("", OUTPUT_QUEUE, null, jsonOutput.getBytes());
+//                    connection.confirm();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
 
 
     }
