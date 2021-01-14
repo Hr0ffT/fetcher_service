@@ -26,7 +26,7 @@ public class Parser {
 
 
     public static String parseInputForBarcode(String jsonInput) throws JsonProcessingException {
-        return JsonHandler.jsonStringToNode(jsonInput).get("telegram_input_service").get("message").get("text").asText();
+        return JsonHandler.jsonStringToNode(jsonInput).get("image_processing_service").get("barcode").asText();
     }
 
 

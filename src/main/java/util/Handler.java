@@ -26,8 +26,9 @@ public class Handler {
 
     public static void initProgram() throws IOException, TimeoutException {
         if (!initialized) {
-            rabbit = new Rabbit();
             dataFetcher = new DataFetcher();
+            rabbit = new Rabbit();
+
 
             initialized = true;
         }

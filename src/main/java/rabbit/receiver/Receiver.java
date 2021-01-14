@@ -22,8 +22,8 @@ public class Receiver {
 
     private Receiver(MQConnection mqConnection) throws IOException {
         this.rabbit = mqConnection;
-        inputChannel = mqConnection.getInputChannel();
-        this.INPUT_QUEUE = MQConnection.getInputQueue();
+        inputChannel = rabbit.getInputChannel();
+        this.INPUT_QUEUE = rabbit.getInputQueue();
 
         startMessageReceiving();
 

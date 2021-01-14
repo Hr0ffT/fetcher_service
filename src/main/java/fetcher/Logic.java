@@ -133,6 +133,8 @@ public class Logic {
             System.out.println("Проавл попытки поиска! IOException");
             searchAttemptFailed = true;
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 

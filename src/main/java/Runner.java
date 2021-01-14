@@ -12,7 +12,9 @@ public class Runner {
 
     //https://api.telegram.org/file/bot1429779011:AAHlPsaXZxcS7QJTbx31Y8ZuSOF06iktvw8/photos/file_0.jpg
 
+//todo после эксепшена валит соединение с кроликом
 
+    //todo эксепшен, если число короткое
 
     public static void main(String[] args) throws IOException, TimeoutException {
 

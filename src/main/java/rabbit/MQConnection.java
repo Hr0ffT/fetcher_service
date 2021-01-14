@@ -49,7 +49,7 @@ public class MQConnection {
         }
     }
 
-    public static String getInputQueue() {
+    public String getInputQueue() {
         return mqData.getINPUT_QUEUE();
     }
 
