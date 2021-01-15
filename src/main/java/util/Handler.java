@@ -35,32 +35,22 @@ public class Handler {
     }
 
 
-
-
     public static void messageReceived(String jsonInputMessage) throws JsonProcessingException {
         jsonInput = jsonInputMessage;
 
-        getBarcodeFromInput(jsonInput);
 
-        if (isCorrectBarcode()) {
-            System.out.println(" BARCODE IS OK " + barcode);
+        if (barcodeIsFound()) {
+            getBarcodeFromInput(jsonInput);
             findProductDataByBarcodeAsJson(barcode);
         } else {
 
-            System.out.println("Barcode is not numeric!");
-            jsonProductData = JsonHandler.serializeToJson(new ProductData(" ", " ", "Incorrect Barcode"));
-//todo проверка будет происходить в рекогнайзере
+            System.out.println("Barcode has not been recognized!");
+            jsonProductData = JsonHandler.serializeToJson(new ProductData("Не удалось распознать штрихкод! Пожалуйста, попробуйте снова!"));
 
         }
         System.out.println("Пошел на отправку!");
         prepareOutputJson();
         sendOutputJson();
-
-
-        //ОТПРАВЛЯЕМ!!!!
-
-
-
 
     }
 
@@ -95,19 +85,9 @@ public class Handler {
         }
     }
 
-    private static boolean isCorrectBarcode() {
-
-
-        try {
-            Long.parseLong(barcode);
-            System.out.println(barcode);
-            //TODO проверка будет происходить в рекогнайзере
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
-
+    private static boolean barcodeIsFound() {
+        // image_processing_service will send "-1" if barcode couldn't have been recognized.
+        return Long.parseLong(barcode) > 0;
     }
 
 }
