@@ -20,6 +20,7 @@ public class Engine {
     private String jsonSearchResult;
 
 
+
     public Engine(Credentials credentials) {
         this.credentials = credentials;
         initTargetURL();
@@ -32,13 +33,21 @@ public class Engine {
 
         JsonNode responseRootNode = JsonHandler.jsonStringToNode(jsonSearchResult);
 
-        String photoURL = Parser.parsePhotoURL(responseRootNode);
-        String userRate = Parser.parseUserRate(responseRootNode);
 
-        String description = fetchProductDescription(responseRootNode);
+        try {
+            String photoURL = Parser.parsePhotoURL(responseRootNode);
+            String userRate = Parser.parseUserRate(responseRootNode);
+            String description = fetchProductDescription(responseRootNode);
+            return new ProductData(photoURL, userRate, description);
+        }   catch (NullPointerException e) {
+            return new ProductData(getNotFoundDescription(barcode));
+        }
 
-        return new ProductData(photoURL, userRate, description);
 
+
+    }
+    private String getNotFoundDescription(String barcode) {
+        return String.format("К сожалению, продукт со штрихкодом %s не был найден! Пожалуйста, проверьте совпадают ли указанные цифры с кодом, указанным на упаковке и попробуйте еще раз. Товары, не сертифицированные на территории РФ, могут быть не найдены. ", barcode);
     }
 
     public void setCredentials(Credentials credentials) {

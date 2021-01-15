@@ -47,9 +47,9 @@ public class Handler {
             findProductDataByBarcodeAsJson(barcode);
         } else {
 
-            System.out.println("Запрос - говно!");
-            jsonProductData = JsonHandler.serializeToJson(new ProductData(" ", " ", "ВАШ ЗАПРОС ГОВНО!"));
-
+            System.out.println("Barcode is not numeric!");
+            jsonProductData = JsonHandler.serializeToJson(new ProductData(" ", " ", "Incorrect Barcode"));
+//todo отправить в очередь с ошибками мб
 
         }
         System.out.println("Пошел на отправку!");
@@ -60,7 +60,6 @@ public class Handler {
         //ОТПРАВЛЯЕМ!!!!
 
 
-        //TODO ОТПРАВЛЯТЬ ОШИБКУ, ЕСЛИ НЕ УДАЛОСЬ НАЙТИ ПРОДУКТ!!
 
 
     }
@@ -88,6 +87,8 @@ public class Handler {
     }
 
     private static void findProductDataByBarcodeAsJson(String barcode) {
+        //TODO ОТПРАВЛЯТЬ ОШИБКУ, ЕСЛИ НЕ УДАЛОСЬ НАЙТИ ПРОДУКТ
+
         try {
             jsonProductData = dataFetcher.fetchProductDataAsJson(barcode);
         } catch (IOException | CredentialsDayLimitException | JSONException e) {

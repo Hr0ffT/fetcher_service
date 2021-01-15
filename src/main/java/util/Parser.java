@@ -20,7 +20,7 @@ public class Parser {
         return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:url").asText();
     }
 
-    public static String parsePhotoURL(JsonNode responseRootNode) {
+    public static String parsePhotoURL(JsonNode responseRootNode) throws NullPointerException{
         return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:image").asText();
     }
 
