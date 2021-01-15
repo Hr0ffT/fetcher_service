@@ -45,7 +45,7 @@ public class Handler {
         } else {
 
             System.out.println("Barcode has not been recognized!");
-            jsonProductData = JsonHandler.serializeToJson(new ProductData("Не удалось распознать штрихкод! Пожалуйста, попробуйте снова!"));
+            jsonProductData = JsonHandler.serializeToJson(new ProductData("Не удалось распознать штрихкод! Пожалуйста, попробуйте снова! Бот принимает фото упаковки товара с четким изображением штрихкода, отправленное в качестве вложения, без сжатия."));
 
         }
         System.out.println("Пошел на отправку!");

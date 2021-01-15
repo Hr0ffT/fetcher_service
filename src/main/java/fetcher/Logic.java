@@ -36,12 +36,11 @@ public class Logic {
         try {
             System.out.println("Попытка поиска");
             trySearch();
+            System.out.println("сценарий #1 -  все хорошо, возвращаем данные");
+
 
         } catch (CredentialsDayLimitException e) {
             System.out.println("сценарий #2 - у активированного ключа закончились попытки поиска");
-
-
-
             handleDayLimitException();
         }
 
@@ -51,9 +50,7 @@ public class Logic {
     private ProductData handleDayLimitException() {
 
 
-
         System.out.println("Пробуем поменять ключ на другой");
-
 
 
         tryToSearchWithDifferentKey();
