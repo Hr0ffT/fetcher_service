@@ -27,9 +27,9 @@ public class Rabbit {
         sender.send(jsonString);
     }
 
-    public Rabbit initRabbit() throws IOException, TimeoutException {
-        return new Rabbit();
-    }
+//    public Rabbit initRabbit() throws IOException, TimeoutException {
+//        return new Rabbit();
+//    }
 
 
 }

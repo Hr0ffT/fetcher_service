@@ -17,11 +17,17 @@ public class Parser {
     }
 
     public static String parseProductURL(JsonNode responseRootNode) {
-        return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:url").asText();
+        String productURLFieldName = "url";
+        return parseURLFromJson(responseRootNode, productURLFieldName);
     }
 
-    public static String parsePhotoURL(JsonNode responseRootNode) throws NullPointerException{
-        return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:image").asText();
+    public static String parsePhotoURL(JsonNode responseRootNode) throws NullPointerException {
+        String photoURLFieldName = "image";
+        return parseURLFromJson(responseRootNode, photoURLFieldName);
+    }
+
+    private static String parseURLFromJson( JsonNode responseRootNode, String fieldName) {
+        return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:" + fieldName).asText();
     }
 
 

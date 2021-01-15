@@ -73,19 +73,17 @@ public class Logic {
         System.out.println("Сценарий #3 -  самый плохой!");
         System.out.println("Все ключи израсходованы!");
 
-
-
-        //// TODO SENDER ДОЛЖЕН ОТПРАВИТЬ СООБЩЕНИЕ О НЕУДАЧНОЙ ПОПЫТКЕ (НЕТ ДОСТУПНЫХ ПОИСКОВИКОВ)
-
-
-
         System.out.println("У всех ключей кончились попытки, мы нихера не нашли!!");
 
 
 
-        return null;
+        return new ProductData(getServiceUnavailableDescription());
 
 
+    }
+
+    private String getServiceUnavailableDescription() {
+        return "В данный момент сервис недоступен! Пожалуйста, повторите попытку позднее!";
     }
 
 

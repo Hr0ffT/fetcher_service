@@ -25,22 +25,6 @@ public class Credentials {
         checkAvailableCredentials();
     }
 
-//todo переделать
-
-    private void putParameters() {
-
-        parametersPool.put(
-                "b16555d6478b893e4", "AIzaSyAu25Ye0uxJEjJcLvIZj8YZJF1a82vdInQ"
-        );
-        parametersPool.put(
-                "6ff535218ad7fe3ba", "AIzaSyC8KNeuOz61wQlj6202MYO3piEbSDdw9rc"
-        );
-        parametersPool.put(
-                "b5931624bb8243dd1", "AIzaSyAWtl7WJNi_Kyw2QW_DZPTlfawEaMFaDhI"
-        );
-
-
-    }
 
 
     private void initParametersMap() {
@@ -50,10 +34,7 @@ public class Credentials {
             e.printStackTrace();
         }
 
-//        //TODO dasda
-//
-//
-//        putParameters();
+
     }
 
     private void initFields() {

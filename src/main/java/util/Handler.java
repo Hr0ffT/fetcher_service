@@ -49,7 +49,7 @@ public class Handler {
 
             System.out.println("Barcode is not numeric!");
             jsonProductData = JsonHandler.serializeToJson(new ProductData(" ", " ", "Incorrect Barcode"));
-//todo отправить в очередь с ошибками мб
+//todo проверка будет происходить в рекогнайзере
 
         }
         System.out.println("Пошел на отправку!");
@@ -87,7 +87,6 @@ public class Handler {
     }
 
     private static void findProductDataByBarcodeAsJson(String barcode) {
-        //TODO ОТПРАВЛЯТЬ ОШИБКУ, ЕСЛИ НЕ УДАЛОСЬ НАЙТИ ПРОДУКТ
 
         try {
             jsonProductData = dataFetcher.fetchProductDataAsJson(barcode);
@@ -102,7 +101,7 @@ public class Handler {
         try {
             Long.parseLong(barcode);
             System.out.println(barcode);
-            //TODO переписать под image processing service
+            //TODO проверка будет происходить в рекогнайзере
             return true;
         } catch (NumberFormatException e) {
             return false;
