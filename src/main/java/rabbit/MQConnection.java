@@ -20,7 +20,7 @@ public class MQConnection {
     private long deliveryTag;
 
     private MQConnection() throws IOException, TimeoutException {
-        mqData = readMQDataFromFile();
+        mqData = readMQDataFromSysEnv();
 
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setUsername(mqData.getUSER_NAME());
@@ -34,6 +34,10 @@ public class MQConnection {
 
     private MQData readMQDataFromFile() throws IOException {
         return JsonHandler.deserializeMQData(mqDataFilePath);
+    }
+
+    private MQData readMQDataFromSysEnv() {
+        return new MQData();
     }
 
     public static MQConnection initRabbitConnection() throws IOException, TimeoutException {

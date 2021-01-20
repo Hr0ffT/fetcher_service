@@ -12,6 +12,13 @@ public class MQData {
 
     private String MQ_HOST;
 
+    public MQData() {
+        this.INPUT_QUEUE = System.getenv("INPUT_QUEUE") ;
+        this.OUTPUT_QUEUE = System.getenv("OUTPUT_QUEUE");
+        this.USER_NAME = System.getenv("MQ_USERNAME");
+        this.PASSWORD = System.getenv("MQ_PASSWORD");
+        this.MQ_HOST = System.getenv("MQ_HOST");
+    }
 
     public void setINPUT_QUEUE(String INPUT_QUEUE){
         this.INPUT_QUEUE = INPUT_QUEUE;

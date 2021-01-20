@@ -13,8 +13,6 @@ public class Credentials {
     String cx;
     String apiKey;
 
-
-
     private static URL credentialsJsonURL;
     private static Map<String, String> parametersPool;
 
