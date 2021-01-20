@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public class Logic {
 
-
     public static boolean thereAreAvailableCredentials;
 
     private final DataFetcher dataFetcher;
@@ -44,7 +43,6 @@ public class Logic {
             handleDayLimitException();
         }
 
-        System.out.println("сценарий #1 -  все хорошо, возвращаем данные");
         return productData;
     }
     private ProductData handleDayLimitException() {
@@ -59,7 +57,7 @@ public class Logic {
 
         if (!searchAttemptFailed) {
 
-            System.out.println("Мы все нашли, передаем данные!");
+            System.out.println("Информация найдена, передаем данные!");
 
             return productData;
         }
@@ -67,10 +65,10 @@ public class Logic {
 
 
 
-        System.out.println("Сценарий #3 -  самый плохой!");
+        System.out.println("Сценарий #3");
         System.out.println("Все ключи израсходованы!");
 
-        System.out.println("У всех ключей кончились попытки, мы нихера не нашли!!");
+        System.out.println("У всех ключей кончились попытки поиска");
 
 
 
@@ -96,8 +94,8 @@ public class Logic {
                 try {
                     trySearch();
                 } catch (CredentialsDayLimitException credentialsDayLimitException) {
-                    System.out.println("Снова-здорова, с этим ключом такая же беда!");
-                    System.out.println("Что ж, попробуем еще, пока есть ключи...");
+                    System.out.println("Данный ключ также недоступен");
+                    System.out.println("Попробуем еще, пока есть ключи...");
                 }
             }
 
@@ -125,7 +123,7 @@ public class Logic {
             throw new CredentialsDayLimitException();
 
         } catch (IOException e) {
-            System.out.println("Проавл попытки поиска! IOException");
+            System.out.println("Провал попытки поиска! IOException");
             searchAttemptFailed = true;
             e.printStackTrace();
         } catch (NullPointerException e) {

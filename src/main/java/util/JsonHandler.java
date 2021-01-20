@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import rabbit.MQData;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,9 +26,9 @@ public class JsonHandler {
 
     }
 
-    public static Map<String, String> jsonFileToMap(Path jsonFilePath) throws IOException {
+    public static Map<String, String> jsonFileToMap(URL jsonFileURL) throws IOException {
 
-        return objectMapper.readValue(jsonFilePath.toFile(), new TypeReference<LinkedHashMap<String, String>>() {
+        return objectMapper.readValue(jsonFileURL, new TypeReference<LinkedHashMap<String, String>>() {
         });
     }
 

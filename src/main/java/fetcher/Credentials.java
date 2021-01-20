@@ -3,7 +3,8 @@ package fetcher;
 import util.JsonHandler;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -12,12 +13,15 @@ public class Credentials {
     String cx;
     String apiKey;
 
-    private static final Path credentialsJsonPath = Path.of("resources/credentials.json");
+
+
+    private static URL credentialsJsonURL;
     private static Map<String, String> parametersPool;
 
     private static int credentialsUsed = 0;
 
     public Credentials() {
+        initCredentialsURL();
         if (parametersPool == null) {
             initParametersMap();
         }
@@ -25,11 +29,23 @@ public class Credentials {
         checkAvailableCredentials();
     }
 
+    private void initCredentialsURL() {
+        String fileIDSysEnvName = "CredentialsFileID";
+
+        String credentialsFileID = System.getenv(fileIDSysEnvName);
+        try {
+            credentialsJsonURL = new URL(String.format("https://drive.google.com/u/0/uc?id=%s&export=download", credentialsFileID));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
     private void initParametersMap() {
         try {
-            parametersPool = JsonHandler.jsonFileToMap(credentialsJsonPath);
+            parametersPool = JsonHandler.jsonFileToMap(credentialsJsonURL);
         } catch (IOException e) {
             e.printStackTrace();
         }
