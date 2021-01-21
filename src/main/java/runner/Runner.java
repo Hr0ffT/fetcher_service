@@ -7,10 +7,6 @@ import java.util.concurrent.TimeoutException;
 
 public class Runner {
 
-
-//todo после эксепшена валит соединение с кроликом
-
-
     public static void main(String[] args) throws IOException, TimeoutException {
 
         Handler.initProgram();

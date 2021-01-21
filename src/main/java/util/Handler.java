@@ -3,6 +3,7 @@ package util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import fetcher.CredentialsDayLimitException;
 import fetcher.DataFetcher;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import rabbit.Rabbit;
 
@@ -11,12 +12,13 @@ import java.util.concurrent.TimeoutException;
 
 public class Handler {
 
-    private static Rabbit rabbit;
+    private static final Logger log = Logger.getLogger(Handler.class);
+
 
     private static boolean initialized = false;
 
+    private static Rabbit rabbit;
     private static DataFetcher dataFetcher;
-
 
     private static String barcode;
     private static String jsonProductData;
@@ -29,7 +31,6 @@ public class Handler {
             dataFetcher = new DataFetcher();
             rabbit = new Rabbit();
 
-
             initialized = true;
         }
     }
@@ -38,27 +39,37 @@ public class Handler {
     public static void messageReceived(String jsonInputMessage) throws JsonProcessingException {
         jsonInput = jsonInputMessage;
 
+        getBarcodeFromInput(jsonInput);
 
         if (barcodeIsFound()) {
-            getBarcodeFromInput(jsonInput);
             findProductDataByBarcodeAsJson(barcode);
+
         } else {
-
-            System.out.println("Barcode has not been recognized!");
-            jsonProductData = JsonHandler.serializeToJson(new ProductData("Не удалось распознать штрихкод! Пожалуйста, попробуйте снова! Бот принимает фото упаковки товара с четким изображением штрихкода, отправленное в качестве вложения, без сжатия."));
-
+            log.info("Barcode has not been recognized.");
+            prepareProductNotFoundJson();
         }
-        System.out.println("Пошел на отправку!");
+
         prepareOutputJson();
         sendOutputJson();
 
+    }
+
+    private static void prepareProductNotFoundJson() throws JsonProcessingException {
+
+        String productNotFoundDescription =
+                "Не удалось распознать штрихкод! Пожалуйста, попробуйте снова! " +
+                        "Бот принимает фото упаковки товара с четким изображением штрихкода, " +
+                        "отправленное в качестве вложения без сжатия.";
+
+        jsonProductData = JsonHandler.serializeToJson(
+                new ProductData(productNotFoundDescription));
     }
 
     private static void prepareOutputJson() {
         try {
             jsonOutput = JsonHandler.putDataInJson(jsonInput, jsonProductData);
         } catch (JSONException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -66,13 +77,11 @@ public class Handler {
         rabbit.send(jsonOutput);
     }
 
-
     private static void getBarcodeFromInput(String inputJson) {
         try {
             barcode = Parser.parseInputForBarcode(inputJson);
-            System.out.println(barcode);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -81,7 +90,7 @@ public class Handler {
         try {
             jsonProductData = dataFetcher.fetchProductDataAsJson(barcode);
         } catch (IOException | CredentialsDayLimitException | JSONException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 

@@ -5,6 +5,7 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import org.apache.log4j.Logger;
 import rabbit.MQConnection;
 import util.Handler;
 
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class Receiver {
+
+    private static final Logger log = Logger.getLogger(Receiver.class);
 
     MQConnection rabbit;
     private final Channel inputChannel;
@@ -36,13 +39,14 @@ public class Receiver {
     public void startMessageReceiving() throws IOException {
 
         inputChannel.queueDeclare(INPUT_QUEUE, true, false, false, null);
-        System.out.println(" [*] Waiting for messages.");
+        System.out.println("[!] Receiver initialized. Waiting for messages...");
         inputChannel.basicConsume(INPUT_QUEUE, false, "fetcher_service", defaultConsumer());
 
     }
 
     private DefaultConsumer defaultConsumer() {
         return new DefaultConsumer(inputChannel) {
+
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope,
                                        AMQP.BasicProperties properties, byte[] body) {
@@ -51,9 +55,10 @@ public class Receiver {
                 decodeMessage(body);
 
                 try {
+                    log.debug("Received a message.");
                     Handler.messageReceived(receivedMessage);
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+                    log.error(e);
                 }
 
             }
@@ -63,8 +68,6 @@ public class Receiver {
     private void decodeMessage(byte[] body) {
         receivedMessage = new String(body, StandardCharsets.UTF_8);
     }
-
-
 
 
 }

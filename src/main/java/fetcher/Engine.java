@@ -14,11 +14,9 @@ import java.io.IOException;
 
 public class Engine {
 
-
     private String targetURL;
     private Credentials credentials;
     private String jsonSearchResult;
-
 
 
     public Engine(Credentials credentials) {

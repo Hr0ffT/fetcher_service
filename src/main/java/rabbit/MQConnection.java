@@ -2,6 +2,7 @@ package rabbit;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
+import org.apache.log4j.Logger;
 import util.JsonHandler;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeoutException;
 
 public class MQConnection {
 
+    private static final Logger log = Logger.getLogger(MQConnection.class);
 
     private static MQData mqData;
     private final Path mqDataFilePath = Path.of("resources/mqdata.json");
@@ -42,14 +44,13 @@ public class MQConnection {
 
     public static MQConnection initRabbitConnection() throws IOException, TimeoutException {
         return new MQConnection();
-
     }
 
     public void confirm() {
         try {
             inputChannel.basicAck(deliveryTag, false);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 

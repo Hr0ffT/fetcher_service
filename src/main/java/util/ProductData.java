@@ -8,7 +8,6 @@ public class ProductData {
     String userRate;
 
 
-
     public ProductData(String photoURL, String userRate, String description) {
 
         this.photoURL = photoURL;

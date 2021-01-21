@@ -26,7 +26,7 @@ public class Parser {
         return parseURLFromJson(responseRootNode, photoURLFieldName);
     }
 
-    private static String parseURLFromJson( JsonNode responseRootNode, String fieldName) {
+    private static String parseURLFromJson(JsonNode responseRootNode, String fieldName) {
         return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:" + fieldName).asText();
     }
 

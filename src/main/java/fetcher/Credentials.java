@@ -1,5 +1,7 @@
 package fetcher;
 
+
+import org.apache.log4j.Logger;
 import util.JsonHandler;
 
 import java.io.IOException;
@@ -8,7 +10,10 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
+
 public class Credentials {
+
+    private static final Logger log = Logger.getLogger(Credentials.class);
 
     String cx;
     String apiKey;
@@ -17,6 +22,7 @@ public class Credentials {
     private static Map<String, String> parametersPool;
 
     private static int credentialsUsed = 0;
+
 
     public Credentials() {
         initCredentialsURL();
@@ -34,18 +40,17 @@ public class Credentials {
         try {
             credentialsJsonURL = new URL(String.format("https://drive.google.com/u/0/uc?id=%s&export=download", credentialsFileID));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error(e);
         }
 
     }
-
 
 
     private void initParametersMap() {
         try {
             parametersPool = JsonHandler.jsonFileToMap(credentialsJsonURL);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
 
 
@@ -58,7 +63,7 @@ public class Credentials {
 
 
         if (credentialsUsed < parametersPool.size() + 1) {
-            System.out.println("Есть доступные варианты");
+
             for (int i = 0; i <= credentialsUsed; i++) {
                 entry = iterator.next();
                 System.out.println("ENTRY " + entry);
@@ -66,22 +71,21 @@ public class Credentials {
                 this.apiKey = entry.getValue();
             }
 
+            log.info(String.format("Credentials initialization: %s %s", cx, apiKey));
 
-            System.out.println("Initializing new credentials: " + cx + " " + apiKey);
             checkAvailableCredentials();
             credentialsUsed++;
 
         } else {
             checkAvailableCredentials();
-            System.out.println("No more available engines!!");
+            log.warn("No more available engines!");
         }
 
     }
 
     public static void resetUsedCredentials() {
         credentialsUsed = 0;
-        System.out.println("Resetting used credentials");
-
+        log.info("Resetting used credentials");
     }
 
     public static void checkAvailableCredentials() {

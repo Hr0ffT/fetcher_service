@@ -1,12 +1,15 @@
 package fetcher;
 
-
+import org.apache.log4j.Logger;
 import util.ProductData;
 
 import java.io.IOException;
 
 
 public class Logic {
+
+    private static final Logger log = Logger.getLogger(Logic.class);
+
 
     public static boolean thereAreAvailableCredentials;
 
@@ -33,47 +36,34 @@ public class Logic {
         this.query = barcode;
 
         try {
-            System.out.println("Попытка поиска");
-            trySearch();
-            System.out.println("сценарий #1 -  все хорошо, возвращаем данные");
 
+            log.debug("Search attempt " + barcode);
+            trySearch();
 
         } catch (CredentialsDayLimitException e) {
-            System.out.println("сценарий #2 - у активированного ключа закончились попытки поиска");
-            handleDayLimitException();
+            log.debug("Case#2: search attempts reached day limit for selected credentials.");
+            return handleDayLimitException();
         }
 
+        log.debug("Case#1: search attempt successful. Returning Program Data");
         return productData;
     }
+
     private ProductData handleDayLimitException() {
 
-
-        System.out.println("Пробуем поменять ключ на другой");
-
+        log.info("Changing credentials.");
 
         tryToSearchWithDifferentKey();
 
 
-
         if (!searchAttemptFailed) {
-
-            System.out.println("Информация найдена, передаем данные!");
-
+            log.info("Search attempt successful. Returning Program Data.");
             return productData;
         }
 
 
-
-
-        System.out.println("Сценарий #3");
-        System.out.println("Все ключи израсходованы!");
-
-        System.out.println("У всех ключей кончились попытки поиска");
-
-
-
+        log.debug("Case#3: All keys has expired for today.");
         return new ProductData(getServiceUnavailableDescription());
-
 
     }
 
@@ -86,24 +76,23 @@ public class Logic {
 
 
         for (; startAttempt < MAX_RESTART_ATTEMPTS; startAttempt++) {
-            System.out.println("Попытка номер: " + startAttempt + "!");
+            log.debug(String.format("Search attempt %s!", startAttempt));
 
             while (searchAttemptFailed && thereAreAvailableCredentials) {
-                System.out.println("Пробуем искать, пока не получится найти или не закончатся доступные ключи");
+                log.info("Keeping searching until success or we are out of available keys.");
                 dataFetcher.switchEngineCredentials();
+
                 try {
                     trySearch();
                 } catch (CredentialsDayLimitException credentialsDayLimitException) {
-                    System.out.println("Данный ключ также недоступен");
-                    System.out.println("Попробуем еще, пока есть ключи...");
+                    log.info("Search attempts reached day limit for selected key as well.");
                 }
             }
 
         }
 
-
-        //После всех попыток, вернем переменные на стартовое значение,
-        // чтобы пройти этот страшный путь заново, есть снова возникнет такая проблема
+        //  Resetting values in order to be able to iterate through
+        //  all existing credentials in case of reaching limits.
 
         Credentials.resetUsedCredentials();
         resetAttempts();
@@ -111,27 +100,25 @@ public class Logic {
 
 
     private void trySearch() throws CredentialsDayLimitException {
+
         try {
-            System.out.println("Ищем " + query);
             productData = engine.findProductData(query);
             searchAttemptFailed = false;
 
         } catch (CredentialsDayLimitException e) {
-            System.out.println("Проавл попытки поиска, у данного ключа закончились попытки!");
             searchAttemptFailed = true;
-            e.printStackTrace();
+            log.error(e);
             throw new CredentialsDayLimitException();
-
         } catch (IOException e) {
-            System.out.println("Провал попытки поиска! IOException");
             searchAttemptFailed = true;
-            e.printStackTrace();
+            log.error(e);
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
     private static void resetAttempts() {
+        log.info("Resetting attempts");
         startAttempt = 0;
     }
 

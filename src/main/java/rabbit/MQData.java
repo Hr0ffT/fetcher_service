@@ -13,41 +13,50 @@ public class MQData {
     private String MQ_HOST;
 
     public MQData() {
-        this.INPUT_QUEUE = System.getenv("INPUT_QUEUE") ;
+        this.INPUT_QUEUE = System.getenv("INPUT_QUEUE");
         this.OUTPUT_QUEUE = System.getenv("OUTPUT_QUEUE");
         this.USER_NAME = System.getenv("MQ_USERNAME");
         this.PASSWORD = System.getenv("MQ_PASSWORD");
         this.MQ_HOST = System.getenv("MQ_HOST");
     }
 
-    public void setINPUT_QUEUE(String INPUT_QUEUE){
+    public void setINPUT_QUEUE(String INPUT_QUEUE) {
         this.INPUT_QUEUE = INPUT_QUEUE;
     }
-    public String getINPUT_QUEUE(){
+
+    public String getINPUT_QUEUE() {
         return this.INPUT_QUEUE;
     }
-    public void setOUTPUT_QUEUE(String OUTPUT_QUEUE){
+
+    public void setOUTPUT_QUEUE(String OUTPUT_QUEUE) {
         this.OUTPUT_QUEUE = OUTPUT_QUEUE;
     }
-    public String getOUTPUT_QUEUE(){
+
+    public String getOUTPUT_QUEUE() {
         return this.OUTPUT_QUEUE;
     }
-    public void setUSER_NAME(String USER_NAME){
+
+    public void setUSER_NAME(String USER_NAME) {
         this.USER_NAME = USER_NAME;
     }
-    public String getUSER_NAME(){
+
+    public String getUSER_NAME() {
         return this.USER_NAME;
     }
-    public void setPASSWORD(String PASSWORD){
+
+    public void setPASSWORD(String PASSWORD) {
         this.PASSWORD = PASSWORD;
     }
-    public String getPASSWORD(){
+
+    public String getPASSWORD() {
         return this.PASSWORD;
     }
-    public void setMQ_HOST(String MQ_HOST){
+
+    public void setMQ_HOST(String MQ_HOST) {
         this.MQ_HOST = MQ_HOST;
     }
-    public String getMQ_HOST(){
+
+    public String getMQ_HOST() {
         return this.MQ_HOST;
     }
 
