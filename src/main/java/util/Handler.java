@@ -27,6 +27,7 @@ public class Handler {
 
 
     public static void initProgram() throws IOException, TimeoutException {
+        System.out.println(" ----- fetcher_service started -----");
         if (!initialized) {
             dataFetcher = new DataFetcher();
             rabbit = new Rabbit();

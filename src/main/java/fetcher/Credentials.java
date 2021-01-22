@@ -1,6 +1,5 @@
 package fetcher;
 
-
 import org.apache.log4j.Logger;
 import util.JsonHandler;
 
@@ -35,8 +34,8 @@ public class Credentials {
 
     private void initCredentialsURL() {
         String fileIDSysEnvName = "CredentialsFileID";
-
         String credentialsFileID = System.getenv(fileIDSysEnvName);
+
         try {
             credentialsJsonURL = new URL(String.format("https://drive.google.com/u/0/uc?id=%s&export=download", credentialsFileID));
         } catch (MalformedURLException e) {
@@ -53,7 +52,6 @@ public class Credentials {
             log.error(e);
         }
 
-
     }
 
     private void initFields() {
@@ -66,7 +64,7 @@ public class Credentials {
 
             for (int i = 0; i <= credentialsUsed; i++) {
                 entry = iterator.next();
-                System.out.println("ENTRY " + entry);
+                log.info("Using creds: " + entry);
                 this.cx = entry.getKey();
                 this.apiKey = entry.getValue();
             }
