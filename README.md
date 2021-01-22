@@ -1,7 +1,7 @@
 {"telegram_input_service": {"userdata": {"chat_type": "private", "can_join_groups": null, "can_read_all_group_messages":
 null, "is_bot": false, "link": "https://t.me/Hr0ffT", "name": "@Hr0ffT", "supports_inline_queries": null, "username": "
 Hr0ffT", "last_name": null, "first_name": "Hr0ffT", "full_name": "Hr0ffT", "id": 349367296, "language_code": "ru"}, "
-botdata": {"token": "1429779011:AAHlPsaXZxcS7QJTbx31Y8ZuSOF06iktvw8", "name": "@VotBarCode_bot", "id": 1429779011, "
+botdata": {"token": <hidden>, "name": "@VotBarCode_bot", "id": 1429779011, "
 link": "https://t.me/VotBarCode_bot", "can_join_groups": true, "can_read_all_group_messages": false, "commands": {"
 start": "запуск бота.", "help": "вопросы, отзывы, предложения."}, "first_name": "VotBarCode_bot", "last_name": null, "
 username": "VotBarCode_bot", "supports_inline_queries": false}, "message": {"datetime": {"humanized_datetime": "
