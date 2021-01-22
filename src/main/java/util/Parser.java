@@ -6,39 +6,55 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class Parser {
 
-    public static String parseUserRate(JsonNode responseRootNode) {
-        String userRate = responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:description").asText();
+    private static final String ANTECEDENT_SERVICE_NAME = "image_processing_service";
 
-        if (!isCorrectUserRate(userRate)) {
-            return " ";
+
+    public static String getTargetValueFromResponse(JsonNode responseRootNode, Fields fieldName) {
+
+        String targetValue = getTargetValueFromJsonNode(responseRootNode, fieldName);
+
+        if (fieldName == Fields.USER_RATE) {
+            if (!isCorrectUserRate(targetValue)) {
+                return "Оценки пользователей отсутствуют.";
+            }
         }
-
-        return userRate;
+        return targetValue;
     }
-
-    public static String parseProductURL(JsonNode responseRootNode) {
-        String productURLFieldName = "url";
-        return parseURLFromJson(responseRootNode, productURLFieldName);
-    }
-
-    public static String parsePhotoURL(JsonNode responseRootNode) throws NullPointerException {
-        String photoURLFieldName = "image";
-        return parseURLFromJson(responseRootNode, photoURLFieldName);
-    }
-
-    private static String parseURLFromJson(JsonNode responseRootNode, String fieldName) {
-        return responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0).get("og:" + fieldName).asText();
-    }
-
 
     public static String parseInputForBarcode(String jsonInput) throws JsonProcessingException {
-        return JsonHandler.jsonStringToNode(jsonInput).get("image_processing_service").get("barcode").asText();
-    }
+        JsonNode antecedentServiceDataNode = JsonHandler.jsonStringToNode(jsonInput).get(ANTECEDENT_SERVICE_NAME);
+        String targetField = "barcode";
 
+        return antecedentServiceDataNode.get(targetField).asText();
+    }
 
     private static boolean isCorrectUserRate(String userRate) {
         return userRate.contains("★");
     }
 
+    private static String getTargetValueFromJsonNode(JsonNode responseRootNode, Fields fieldName) {
+        JsonNode targetArray = responseRootNode.get("items").get(0).get("pagemap").get("metatags").get(0);
 
+        return targetArray.get("og:" + fieldName.toString()).asText();
+    }
+
+    public enum Fields {
+
+        USER_RATE("description"),
+        PRODUCT_URL("url"),
+        PHOTO_URL("image");
+
+        private final String value;
+
+        Fields(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
 }
+
+

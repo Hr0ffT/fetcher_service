@@ -27,6 +27,7 @@ public class Sender {
     public void send(String jsonOutput) {
 
         try {
+            log.debug("Publishing to " + OUTPUT_QUEUE);
             outputChannel.basicPublish("", OUTPUT_QUEUE, null, jsonOutput.getBytes());
             connection.confirm();
         } catch (IOException e) {

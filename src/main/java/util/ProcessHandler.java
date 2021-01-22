@@ -10,9 +10,11 @@ import rabbit.Rabbit;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class Handler {
+public class ProcessHandler {
 
-    private static final Logger log = Logger.getLogger(Handler.class);
+    private static final Logger log = Logger.getLogger(ProcessHandler.class);
+
+    private static final String START_MESSAGE = " ----- fetcher_service started -----";
 
 
     private static boolean initialized = false;
@@ -27,7 +29,7 @@ public class Handler {
 
 
     public static void initProgram() throws IOException, TimeoutException {
-        System.out.println(" ----- fetcher_service started -----");
+        System.out.println(START_MESSAGE);
         if (!initialized) {
             dataFetcher = new DataFetcher();
             rabbit = new Rabbit();

@@ -33,19 +33,24 @@ public class Engine {
 
 
         try {
-            String photoURL = Parser.parsePhotoURL(responseRootNode);
-            String userRate = Parser.parseUserRate(responseRootNode);
+
+            String photoURL = Parser.getTargetValueFromResponse(responseRootNode, Parser.Fields.PHOTO_URL);
+            String userRate = Parser.getTargetValueFromResponse(responseRootNode, Parser.Fields.USER_RATE);
             String description = fetchProductDescription(responseRootNode);
             return new ProductData(photoURL, userRate, description);
-        }   catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return new ProductData(getNotFoundDescription(barcode));
         }
 
 
-
     }
+
     private String getNotFoundDescription(String barcode) {
-        return String.format("К сожалению, продукт со штрихкодом %s не был найден! Пожалуйста, проверьте совпадают ли указанные цифры с кодом, указанным на упаковке и попробуйте еще раз. Товары, не сертифицированные на территории РФ, могут быть не найдены. ", barcode);
+        return String.format(
+                        "К сожалению, продукт со штрихкодом %s не был найден! " +
+                        "Пожалуйста, проверьте совпадают ли указанные цифры с кодом, " +
+                        "указанным на упаковке и попробуйте еще раз. " +
+                        "Товары, не сертифицированные на территории РФ, могут быть не найдены. ", barcode);
     }
 
     public void setCredentials(Credentials credentials) {
@@ -56,7 +61,8 @@ public class Engine {
 
 
     private String fetchProductDescription(JsonNode responseRootNode) throws IOException {
-        String productURL = Parser.parseProductURL(responseRootNode);
+
+        String productURL = Parser.getTargetValueFromResponse(responseRootNode, Parser.Fields.PRODUCT_URL);
         Document htmlDoc = Jsoup.connect(productURL).get();
 
         String name = htmlDoc.select("h1").text();
@@ -75,13 +81,11 @@ public class Engine {
 
     private void fetchSearchResultAsJson(String query) throws CredentialsDayLimitException {
 
-
         try {
             jsonSearchResult = Jsoup.connect(targetURL + query).ignoreContentType(true).execute().body();
         } catch (IOException e) {
             throw new CredentialsDayLimitException();
         }
-
 
     }
 

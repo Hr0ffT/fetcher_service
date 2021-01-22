@@ -7,7 +7,7 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import org.apache.log4j.Logger;
 import rabbit.MQConnection;
-import util.Handler;
+import util.ProcessHandler;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,6 +15,9 @@ import java.nio.charset.StandardCharsets;
 public class Receiver {
 
     private static final Logger log = Logger.getLogger(Receiver.class);
+
+    private static final String CONSUMER_TAG = "fetcher_service";
+    private static final String START_MESSAGE = "[!] Receiver initialized. Waiting for messages...";
 
     MQConnection rabbit;
     private final Channel inputChannel;
@@ -39,8 +42,8 @@ public class Receiver {
     public void startMessageReceiving() throws IOException {
 
         inputChannel.queueDeclare(INPUT_QUEUE, true, false, false, null);
-        System.out.println("[!] Receiver initialized. Waiting for messages...");
-        inputChannel.basicConsume(INPUT_QUEUE, false, "fetcher_service", defaultConsumer());
+        System.out.println(START_MESSAGE);
+        inputChannel.basicConsume(INPUT_QUEUE, false, CONSUMER_TAG, defaultConsumer());
 
     }
 
@@ -56,7 +59,7 @@ public class Receiver {
 
                 try {
                     log.debug("Received a message.");
-                    Handler.messageReceived(receivedMessage);
+                    ProcessHandler.messageReceived(receivedMessage);
                 } catch (JsonProcessingException e) {
                     log.error(e);
                 }

@@ -1,6 +1,7 @@
 package rabbit;
 
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.apache.log4j.Logger;
 import util.JsonHandler;
@@ -28,7 +29,7 @@ public class MQConnection {
         connectionFactory.setUsername(mqData.getUSER_NAME());
         connectionFactory.setPassword(mqData.getPASSWORD());
         connectionFactory.setHost(mqData.getMQ_HOST());
-        com.rabbitmq.client.Connection connection = connectionFactory.newConnection();
+        Connection connection = connectionFactory.newConnection();
         this.inputChannel = connection.createChannel();
         this.outputChannel = connection.createChannel();
 

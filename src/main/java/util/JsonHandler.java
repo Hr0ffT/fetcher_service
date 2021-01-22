@@ -17,6 +17,8 @@ import java.util.Map;
 
 public class JsonHandler {
 
+    private static String SERVICE_NAME = "fetcher_service";
+
 
     private static final ObjectMapper objectMapper = getDefaultObjectMapper();
 
@@ -33,8 +35,7 @@ public class JsonHandler {
     }
 
     private static ObjectMapper getDefaultObjectMapper() {
-        ObjectMapper defaultMapper = new ObjectMapper();
-        return defaultMapper;
+        return new ObjectMapper();
     }
 
     public static JsonNode jsonStringToNode(String jsonSrc) throws JsonProcessingException {
@@ -48,7 +49,7 @@ public class JsonHandler {
     public static String putDataInJson(String inputJson, String dataJson) throws JSONException {
         JSONObject inputJsonObject = new JSONObject(inputJson);
         JSONObject dataJsonObject = new JSONObject(dataJson);
-        JSONObject outputJsonObject = inputJsonObject.put("fetcher_service", dataJsonObject);
+        JSONObject outputJsonObject = inputJsonObject.put(SERVICE_NAME, dataJsonObject);
 
         return outputJsonObject.toString();
     }
