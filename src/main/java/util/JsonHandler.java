@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class JsonHandler {
 
-    private static final String SERVICE_NAME = ProcessHandler.getServiceName();
+    private static final String OUTPUT_SERVICE_NAME = System.getenv("OUTPUT_SERVICE_NAME");
 
 
     private static final ObjectMapper objectMapper = getDefaultObjectMapper();
@@ -41,7 +41,7 @@ public class JsonHandler {
     public static String putDataInJson(String inputJson, String dataJson) throws JSONException {
         JSONObject inputJsonObject = new JSONObject(inputJson);
         JSONObject dataJsonObject = new JSONObject(dataJson);
-        JSONObject outputJsonObject = inputJsonObject.put(SERVICE_NAME, dataJsonObject);
+        JSONObject outputJsonObject = inputJsonObject.put(OUTPUT_SERVICE_NAME, dataJsonObject);
 
         return outputJsonObject.toString();
     }

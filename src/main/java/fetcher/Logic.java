@@ -1,5 +1,8 @@
 package fetcher;
 
+import exceptions.CredentialsDayLimitException;
+import exceptions.ProductNotFoundException;
+import exceptions.ServiceUnavailableException;
 import org.apache.log4j.Logger;
 import util.ProductData;
 
@@ -31,7 +34,7 @@ public class Logic {
 
     }
 
-    public ProductData startSearch(String barcode) {
+    public ProductData startSearch(String barcode) throws ServiceUnavailableException, ProductNotFoundException {
 
         this.query = barcode;
 
@@ -49,7 +52,7 @@ public class Logic {
         return productData;
     }
 
-    private ProductData handleDayLimitException() {
+    private ProductData handleDayLimitException() throws ServiceUnavailableException, ProductNotFoundException {
 
         log.info("Changing credentials.");
 
@@ -63,7 +66,7 @@ public class Logic {
 
 
         log.debug("Case#3: All keys has expired for today.");
-        return new ProductData(getServiceUnavailableDescription());
+        throw new ServiceUnavailableException();
 
     }
 
@@ -72,7 +75,7 @@ public class Logic {
     }
 
 
-    private void tryToSearchWithDifferentKey() {
+    private void tryToSearchWithDifferentKey() throws ProductNotFoundException {
 
 
         for (; startAttempt < MAX_RESTART_ATTEMPTS; startAttempt++) {
@@ -99,7 +102,7 @@ public class Logic {
     }
 
 
-    private void trySearch() throws CredentialsDayLimitException {
+    private void trySearch() throws CredentialsDayLimitException, ProductNotFoundException {
 
         try {
             productData = engine.findProductData(query);

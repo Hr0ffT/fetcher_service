@@ -1,11 +1,9 @@
 package fetcher;
 
+import exceptions.ProductNotFoundException;
+import exceptions.ServiceUnavailableException;
 import org.apache.log4j.Logger;
-import org.json.JSONException;
-import util.JsonHandler;
 import util.ProductData;
-
-import java.io.IOException;
 
 
 public class DataFetcher {
@@ -23,9 +21,9 @@ public class DataFetcher {
     }
 
 
-    public String fetchProductDataAsJson(String query) throws IOException, CredentialsDayLimitException, JSONException {
-        ProductData productData = logic.startSearch(query);
-        return JsonHandler.serializeToJson(productData);
+    public ProductData fetchProductData(String query) throws ProductNotFoundException, ServiceUnavailableException {
+
+        return logic.startSearch(query);
     }
 
 

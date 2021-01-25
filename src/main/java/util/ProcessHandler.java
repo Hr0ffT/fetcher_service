@@ -1,10 +1,12 @@
 package util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import fetcher.CredentialsDayLimitException;
+import exceptions.ProductNotFoundException;
+import exceptions.ServiceUnavailableException;
 import fetcher.DataFetcher;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
+import output.*;
 import rabbit.Rabbit;
 
 import java.io.IOException;
@@ -12,11 +14,14 @@ import java.util.concurrent.TimeoutException;
 
 public class ProcessHandler {
 
+    //todo добавить тесты
+
     private static final Logger log = Logger.getLogger(ProcessHandler.class);
 
-    private static final String START_MESSAGE = " ----- fetcher_service started -----";
-
     public static final String SERVICE_NAME = "fetcher_service";
+
+    private static final String START_MESSAGE = String.format(" ----- %s started -----", SERVICE_NAME);
+
 
     private static boolean initialized = false;
 
@@ -24,7 +29,7 @@ public class ProcessHandler {
     private static DataFetcher dataFetcher;
 
     private static String barcode;
-    private static String jsonProductData;
+    private static String jsonFinalMessage;
     private static String jsonInput;
     private static String jsonOutput;
 
@@ -46,11 +51,33 @@ public class ProcessHandler {
         getBarcodeFromInput(jsonInput);
 
         if (barcodeIsFound()) {
-            findProductDataByBarcodeAsJson(barcode);
+
+
+            try {
+
+
+                ProductData productData = findProductDataByBarcode(barcode);
+                prepareJsonFinalMessage(new SuccessMessage(productData));
+
+
+            } catch (ProductNotFoundException e) {
+
+                prepareJsonFinalMessage(new ProductNotFoundMessage(barcode));
+                log.error(e);
+
+            } catch (ServiceUnavailableException e) {
+
+                prepareJsonFinalMessage(new ServiceUnavailableMessage());
+                log.error(e);
+
+            }
+
 
         } else {
+
             log.info("Barcode has not been recognized.");
-            prepareProductNotFoundJson();
+            prepareJsonFinalMessage(new NoBarcodeMessage());
+
         }
 
         prepareOutputJson();
@@ -58,20 +85,15 @@ public class ProcessHandler {
 
     }
 
-    private static void prepareProductNotFoundJson() throws JsonProcessingException {
-
-        String productNotFoundDescription =
-                "Не удалось распознать штрихкод! Пожалуйста, попробуйте снова! " +
-                        "Бот принимает фото упаковки товара с четким изображением штрихкода, " +
-                        "отправленное в качестве вложения без сжатия.";
-
-        jsonProductData = JsonHandler.serializeToJson(
-                new ProductData(productNotFoundDescription));
+    private static void prepareJsonFinalMessage(FinalMessage finalMessage) throws JsonProcessingException {
+        jsonFinalMessage = JsonHandler.serializeToJson(finalMessage);
     }
 
     private static void prepareOutputJson() {
         try {
-            jsonOutput = JsonHandler.putDataInJson(jsonInput, jsonProductData);
+
+            jsonOutput = JsonHandler.putDataInJson(jsonInput, jsonFinalMessage);
+
         } catch (JSONException e) {
             log.error(e);
         }
@@ -89,13 +111,10 @@ public class ProcessHandler {
         }
     }
 
-    private static void findProductDataByBarcodeAsJson(String barcode) {
+    private static ProductData findProductDataByBarcode(String barcode) throws ProductNotFoundException, ServiceUnavailableException {
 
-        try {
-            jsonProductData = dataFetcher.fetchProductDataAsJson(barcode);
-        } catch (IOException | CredentialsDayLimitException | JSONException e) {
-            log.error(e);
-        }
+        return dataFetcher.fetchProductData(barcode);
+
     }
 
     private static boolean barcodeIsFound() {
@@ -103,8 +122,5 @@ public class ProcessHandler {
         return Long.parseLong(barcode) > 0;
     }
 
-    public static String getServiceName() {
-        return SERVICE_NAME;
-    }
 
 }
