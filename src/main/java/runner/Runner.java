@@ -11,6 +11,8 @@ public class Runner {
 
         ProcessHandler.initProgram();
 
+
+        //todo разобраться с routing key
     }
 
 
