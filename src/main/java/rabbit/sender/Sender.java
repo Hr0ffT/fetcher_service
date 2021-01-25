@@ -12,12 +12,15 @@ public class Sender {
 
     MQConnection connection;
     private final Channel outputChannel;
-    private final String OUTPUT_QUEUE;
+    private final String ROUTING_KEY;
+    private final String EXCHANGE;
 
     private Sender(MQConnection mqConnection) {
         this.connection = mqConnection;
-        this.outputChannel = mqConnection.getOutputChannel();
-        this.OUTPUT_QUEUE = MQConnection.getOutputQueue();
+        this.outputChannel = connection.getOutputChannel();
+        this.ROUTING_KEY = connection.getRoutingKey();
+        this.EXCHANGE = connection.getExchange();
+
     }
 
     public static Sender initSender(MQConnection mqConnection) {
@@ -27,8 +30,8 @@ public class Sender {
     public void send(String jsonOutput) {
 
         try {
-            log.debug("Publishing to " + OUTPUT_QUEUE);
-            outputChannel.basicPublish("", OUTPUT_QUEUE, null, jsonOutput.getBytes());
+            log.debug(String.format("Publishing to Exchange '%s' with '%s' as Routing Key",EXCHANGE, ROUTING_KEY));
+            outputChannel.basicPublish(EXCHANGE, ROUTING_KEY, null, jsonOutput.getBytes());
             connection.confirm();
         } catch (IOException e) {
             log.error(e);

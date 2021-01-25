@@ -16,7 +16,7 @@ public class Receiver {
 
     private static final Logger log = Logger.getLogger(Receiver.class);
 
-    private static final String CONSUMER_TAG = "fetcher_service";
+    private static final String CONSUMER_TAG = System.getenv("CONSUMER_TAG");
     private static final String START_MESSAGE = "[!] Receiver initialized. Waiting for messages...";
 
     MQConnection rabbit;

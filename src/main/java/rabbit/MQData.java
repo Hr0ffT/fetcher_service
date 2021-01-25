@@ -4,7 +4,9 @@ public class MQData {
 
     private String INPUT_QUEUE;
 
-    private String OUTPUT_QUEUE;
+    private String MQ_EXCHANGE;
+
+    private String ROUTING_KEY;
 
     private String USER_NAME;
 
@@ -12,12 +14,16 @@ public class MQData {
 
     private String MQ_HOST;
 
+    private String AMQP_PORT;
+
     public MQData() {
         this.INPUT_QUEUE = System.getenv("INPUT_QUEUE");
-        this.OUTPUT_QUEUE = System.getenv("OUTPUT_QUEUE");
+        this.MQ_EXCHANGE = System.getenv("MQ_EXCHANGE");
+        this.ROUTING_KEY = System.getenv("ROUTING_KEY");
         this.USER_NAME = System.getenv("MQ_USERNAME");
         this.PASSWORD = System.getenv("MQ_PASSWORD");
         this.MQ_HOST = System.getenv("MQ_HOST");
+        this.AMQP_PORT = System.getenv("AMQP_PORT");
     }
 
     public void setINPUT_QUEUE(String INPUT_QUEUE) {
@@ -28,12 +34,20 @@ public class MQData {
         return this.INPUT_QUEUE;
     }
 
-    public void setOUTPUT_QUEUE(String OUTPUT_QUEUE) {
-        this.OUTPUT_QUEUE = OUTPUT_QUEUE;
+    public String getMQ_EXCHANGE() {
+        return MQ_EXCHANGE;
     }
 
-    public String getOUTPUT_QUEUE() {
-        return this.OUTPUT_QUEUE;
+    public void setMQ_EXCHANGE(String MQ_EXCHANGE) {
+        this.MQ_EXCHANGE = MQ_EXCHANGE;
+    }
+
+    public void setROUTING_KEY(String ROUTING_KEY) {
+        this.ROUTING_KEY = ROUTING_KEY;
+    }
+
+    public String getROUTING_KEY() {
+        return this.ROUTING_KEY;
     }
 
     public void setUSER_NAME(String USER_NAME) {
@@ -60,14 +74,24 @@ public class MQData {
         return this.MQ_HOST;
     }
 
+    public String getAMQP_PORT() {
+        return AMQP_PORT;
+    }
+
+    public void setAMQP_PORT(String AMQP_PORT) {
+        this.AMQP_PORT = AMQP_PORT;
+    }
+
     @Override
     public String toString() {
         return "MQData{" +
                 "INPUT_QUEUE='" + INPUT_QUEUE + '\'' +
-                ", OUTPUT_QUEUE='" + OUTPUT_QUEUE + '\'' +
+                ", MQ_EXCHANGE='" + MQ_EXCHANGE + '\'' +
+                ", ROUTING_KEY='" + ROUTING_KEY + '\'' +
                 ", USER_NAME='" + USER_NAME + '\'' +
                 ", PASSWORD='" + PASSWORD + '\'' +
                 ", MQ_HOST='" + MQ_HOST + '\'' +
+                ", AMQP_PORT='" + AMQP_PORT + '\'' +
                 '}';
     }
 }

@@ -4,10 +4,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.apache.log4j.Logger;
-import util.JsonHandler;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.concurrent.TimeoutException;
 
 public class MQConnection {
@@ -15,7 +13,6 @@ public class MQConnection {
     private static final Logger log = Logger.getLogger(MQConnection.class);
 
     private static MQData mqData;
-    private final Path mqDataFilePath = Path.of("resources/mqdata.json");
 
     private final Channel inputChannel;
     private final Channel outputChannel;
@@ -29,14 +26,11 @@ public class MQConnection {
         connectionFactory.setUsername(mqData.getUSER_NAME());
         connectionFactory.setPassword(mqData.getPASSWORD());
         connectionFactory.setHost(mqData.getMQ_HOST());
+        connectionFactory.setPort(Integer.parseInt(mqData.getAMQP_PORT()));
         Connection connection = connectionFactory.newConnection();
         this.inputChannel = connection.createChannel();
         this.outputChannel = connection.createChannel();
 
-    }
-
-    private MQData readMQDataFromFile() throws IOException {
-        return JsonHandler.deserializeMQData(mqDataFilePath);
     }
 
     private MQData readMQDataFromSysEnv() {
@@ -59,8 +53,11 @@ public class MQConnection {
         return mqData.getINPUT_QUEUE();
     }
 
-    public static String getOutputQueue() {
-        return mqData.getOUTPUT_QUEUE();
+    public String getRoutingKey() {
+        return mqData.getROUTING_KEY();
+    }
+    public String getExchange() {
+        return mqData.getMQ_EXCHANGE();
     }
 
     public Channel getInputChannel() {

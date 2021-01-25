@@ -16,6 +16,7 @@ public class ProcessHandler {
 
     private static final String START_MESSAGE = " ----- fetcher_service started -----";
 
+    public static final String SERVICE_NAME = "fetcher_service";
 
     private static boolean initialized = false;
 
@@ -100,6 +101,10 @@ public class ProcessHandler {
     private static boolean barcodeIsFound() {
         // image_processing_service will send "-1" if barcode couldn't have been recognized.
         return Long.parseLong(barcode) > 0;
+    }
+
+    public static String getServiceName() {
+        return SERVICE_NAME;
     }
 
 }
