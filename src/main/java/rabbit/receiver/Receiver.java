@@ -59,6 +59,7 @@ public class Receiver {
 
                 try {
                     log.debug("Received a message.");
+                    System.out.println(" - Received a message.");
                     ProcessHandler.messageReceived(receivedMessage);
                 } catch (JsonProcessingException e) {
                     log.error(e);

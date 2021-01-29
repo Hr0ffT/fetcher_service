@@ -70,10 +70,6 @@ public class Logic {
 
     }
 
-    private String getServiceUnavailableDescription() {
-        return "В данный момент сервис недоступен! Пожалуйста, повторите попытку позднее!";
-    }
-
 
     private void tryToSearchWithDifferentKey() throws ProductNotFoundException {
 

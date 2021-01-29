@@ -47,14 +47,6 @@ public class Engine {
 
     }
 
-//    private String getNotFoundDescription(String barcode) {
-//        return String.format(
-//                        "К сожалению, продукт со штрихкодом %s не был найден! " +
-//                        "Пожалуйста, проверьте совпадают ли указанные цифры с кодом, " +
-//                        "указанным на упаковке и попробуйте еще раз. " +
-//                        "Товары, не сертифицированные на территории РФ, могут быть не найдены. ", barcode);
-//    }
-
     public void setCredentials(Credentials credentials) {
 
         this.credentials = credentials;

@@ -37,6 +37,7 @@ public class Sender {
             log.debug(String.format("Publishing to Exchange '%s' with '%s' as Routing Key",EXCHANGE, ROUTING_KEY));
             outputChannel.basicPublish(EXCHANGE, ROUTING_KEY, basicProperties, jsonOutput.getBytes());
             connection.confirm();
+            System.out.println(" - Published a message");
         } catch (IOException e) {
             log.error(e);
         }
