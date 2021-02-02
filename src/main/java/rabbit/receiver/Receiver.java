@@ -16,30 +16,30 @@ public class Receiver {
 
     private static final Logger log = Logger.getLogger(Receiver.class);
 
+
     private static final String CONSUMER_TAG = System.getenv("CONSUMER_TAG");
     private static final String START_MESSAGE = "[!] Receiver initialized. Waiting for messages...";
 
-    MQConnection rabbit;
-    private final Channel inputChannel;
-    private final String INPUT_QUEUE;
+    private static MQConnection rabbit;
+    private static Channel inputChannel;
+    private static String INPUT_QUEUE;
 
-    private String receivedMessage;
+    private static String receivedMessage;
 
 
-    private Receiver(MQConnection mqConnection) throws IOException {
-        this.rabbit = mqConnection;
+    private Receiver(){
+    }
+
+
+    public static void initReceiver(MQConnection mqConnection) throws IOException {
+        rabbit = mqConnection;
         inputChannel = rabbit.getInputChannel();
-        this.INPUT_QUEUE = rabbit.getInputQueue();
+        INPUT_QUEUE = rabbit.getInputQueue();
 
         startMessageReceiving();
-
     }
 
-    public static Receiver initReceiver(MQConnection mqConnection) throws IOException {
-        return new Receiver(mqConnection);
-    }
-
-    public void startMessageReceiving() throws IOException {
+    private static void startMessageReceiving() throws IOException {
 
         inputChannel.queueDeclare(INPUT_QUEUE, true, false, false, null);
         System.out.println(START_MESSAGE);
@@ -47,7 +47,7 @@ public class Receiver {
 
     }
 
-    private DefaultConsumer defaultConsumer() {
+    private static DefaultConsumer defaultConsumer() {
         return new DefaultConsumer(inputChannel) {
 
             @Override
@@ -69,7 +69,7 @@ public class Receiver {
         };
     }
 
-    private void decodeMessage(byte[] body) {
+    private static void decodeMessage(byte[] body) {
         receivedMessage = new String(body, StandardCharsets.UTF_8);
     }
 

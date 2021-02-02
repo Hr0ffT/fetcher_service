@@ -38,7 +38,7 @@ public class ProcessHandler {
         System.out.println(START_MESSAGE);
         if (!initialized) {
             dataFetcher = new DataFetcher();
-            rabbit = new Rabbit();
+            rabbit = Rabbit.initRabbit();
 
             initialized = true;
         }

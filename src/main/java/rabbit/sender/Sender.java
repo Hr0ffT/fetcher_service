@@ -12,23 +12,27 @@ public class Sender {
 
     private static final Logger log = Logger.getLogger(Sender.class);
 
-    private final MQConnection connection;
-    private final AMQP.BasicProperties basicProperties;
-    private final Channel outputChannel;
-    private final String ROUTING_KEY;
-    private final String EXCHANGE;
+    private static final Sender instance = new Sender();
 
-    private Sender(MQConnection mqConnection) {
-        this.connection = mqConnection;
-        this.outputChannel = connection.getOutputChannel();
-        this.ROUTING_KEY = connection.getRoutingKey();
-        this.EXCHANGE = connection.getExchange();
-        this.basicProperties = buildBasicProperties();
+    private static MQConnection connection;
+    private static AMQP.BasicProperties basicProperties;
+    private static Channel outputChannel;
+    private static String ROUTING_KEY;
+    private static String EXCHANGE;
+
+    private Sender() {
+
 
     }
 
     public static Sender initSender(MQConnection mqConnection) {
-        return new Sender(mqConnection);
+        connection = mqConnection;
+        outputChannel = connection.getOutputChannel();
+        ROUTING_KEY = connection.getRoutingKey();
+        EXCHANGE = connection.getExchange();
+        basicProperties = buildBasicProperties();
+
+        return instance;
     }
 
     public void send(String jsonOutput) {

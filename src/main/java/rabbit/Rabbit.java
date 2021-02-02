@@ -1,5 +1,6 @@
 package rabbit;
 
+import org.apache.log4j.Logger;
 import rabbit.receiver.Receiver;
 import rabbit.sender.Sender;
 
@@ -8,23 +9,33 @@ import java.util.concurrent.TimeoutException;
 
 public class Rabbit {
 
-    private static boolean initialized = false;
+    private static final Logger log = Logger.getLogger(Rabbit.class);
+
+    private static final Rabbit instance = new Rabbit();
 
     MQConnection mqConnection;
-    Receiver receiver;
     Sender sender;
 
-    public Rabbit() throws IOException, TimeoutException {
-        if (!initialized) {
-            this.mqConnection = MQConnection.initRabbitConnection();
-            this.receiver = Receiver.initReceiver(mqConnection);
-            this.sender = Sender.initSender(mqConnection);
-            initialized = true;
-        }
+    private Rabbit() {
+
+            try {
+
+                this.mqConnection = MQConnection.initRabbitConnection();
+                Receiver.initReceiver(mqConnection);
+                this.sender = Sender.initSender(mqConnection);
+
+            } catch (IOException | TimeoutException e) {
+                log.error(e);
+            }
+
     }
 
     public void send(String jsonString) {
         sender.send(jsonString);
+    }
+
+    public static Rabbit initRabbit() {
+        return instance;
     }
 
 
